@@ -1,6 +1,8 @@
 package parser
 
-import "strings"
+import (
+	"strings"
+)
 
 type Match struct {
 	totalKills int
@@ -9,9 +11,44 @@ type Match struct {
 }
 
 func Parse(log string) {
+
 	lines := strings.Split(log, "\n")
 
-	for _, line := range lines {
-		println(line)
+	for i, line := range lines {
+		line := strings.TrimSpace(line)
+		tokens := strings.Split(line, " ")
+
+		if len(tokens) > 2 {
+			if tokens[1] == "InitGame:" {
+				go extractMatch(lines, i)
+			}
+		}
 	}
+}
+
+func extractMatch(lines []string, lineNumber int) Match {
+	// Match data
+	var match Match = Match{
+		totalKills: 0,
+		players:    make([]string, 0),
+		killCount:  make(map[string]int),
+	}
+
+	for _, line := range lines {
+		line := strings.TrimSpace(line)
+		tokens := strings.Split(line, " ")
+		if len(tokens) > 2 {
+			if tokens[1] == "Kill:" {
+				match.totalKills++
+				println(line)
+			} else if tokens[1] == "ShutdownGame:" {
+				println(line)
+				println(match.totalKills)
+				return match
+			}
+		}
+	}
+
+	println(match.totalKills)
+	return match
 }

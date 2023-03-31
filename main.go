@@ -14,7 +14,6 @@ func main() {
 
 	//* Path to the log file
 	var path string = getPath()
-	println(path)
 
 	//* Get contents of the log file
 	var content string = getContent(path)
