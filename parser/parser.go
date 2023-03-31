@@ -58,12 +58,13 @@ func extractMatch(lines []string, lineNumber int, matchNumber int, waitgroup *sy
 		line := strings.TrimSpace(lines[lineNumber])
 		tokens := strings.Split(line, " ")
 		if len(tokens) > 1 {
+			switch tokens[1] {
 			//* Kill data
-			if tokens[1] == "Kill:" {
+			case "Kill:":
 				match.totalKills++
 
-				//* Player name
-			} else if tokens[1] == "ClientUserinfoChanged:" {
+			//* Player name
+			case "ClientUserinfoChanged:":
 				regex := regexp.MustCompile(`\\(\w+|\w+ )+\\`)
 				player := regex.FindString(strings.Join(tokens[3:], " "))
 				if len(player) > 1 {
@@ -73,12 +74,13 @@ func extractMatch(lines []string, lineNumber int, matchNumber int, waitgroup *sy
 					fmt.Println("No match found")
 				}
 
-				//* End of match
-			} else if tokens[1] == "InitGame:" {
+			//* End of match
+			case "InitGame:":
 				println("Match", match.id, "TotalKills", match.totalKills)
 				return match
 			}
 		}
+
 		lineNumber++
 	}
 
