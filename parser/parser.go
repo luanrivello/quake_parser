@@ -65,14 +65,7 @@ func extractMatch(lines []string, lineNumber int, matchNumber int, waitgroup *sy
 
 			//* Player name
 			case "ClientUserinfoChanged:":
-				regex := regexp.MustCompile(`\\(\w+|\w+ )+\\`)
-				player := regex.FindString(strings.Join(tokens[3:], " "))
-				if len(player) > 1 {
-					player := strings.ReplaceAll(player, "\\", "")
-					println(player)
-				} else {
-					fmt.Println("No match found")
-				}
+				registerPlayer(&match, tokens)
 
 			//* End of match
 			case "InitGame:":
@@ -86,4 +79,18 @@ func extractMatch(lines []string, lineNumber int, matchNumber int, waitgroup *sy
 
 	println("Match", match.id, "TotalKills", match.totalKills)
 	return match
+}
+
+func registerPlayer(match *Match, tokens []string) {
+	//* Extract Player Name
+	regex := regexp.MustCompile(`\\(\w+|\w+ )+\\`)
+	player := regex.FindString(strings.Join(tokens[3:], " "))
+	if len(player) > 1 {
+		player := strings.ReplaceAll(player, "\\", "")
+		println(player)
+	} else {
+		fmt.Println("No match found")
+	}
+	
+	//* Register new player
 }
