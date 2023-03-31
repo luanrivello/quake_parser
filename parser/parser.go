@@ -24,7 +24,6 @@ func Parse(log string) {
 			if tokens[1] == "InitGame:" {
 				waitgroup.Add(1)
 				go extractMatch(lines, i, &waitgroup)
-				break
 			}
 		}
 	}
@@ -42,19 +41,18 @@ func extractMatch(lines []string, lineNumber int, waitgroup *sync.WaitGroup) Mat
 		killCount:  make(map[string]int),
 	}
 
-	for _, line := range lines {
-		line := strings.TrimSpace(line)
+	for {
+		line := strings.TrimSpace(lines[lineNumber])
 		tokens := strings.Split(line, " ")
-		if len(tokens) > 2 {
+		if len(tokens) > 1 {
 			if tokens[1] == "Kill:" {
 				match.totalKills++
-				println(line)
 			} else if tokens[1] == "ShutdownGame:" {
-				println(line)
 				println(match.totalKills)
 				return match
 			}
 		}
+		lineNumber++
 	}
 
 	println(match.totalKills)
