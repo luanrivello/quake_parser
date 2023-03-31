@@ -6,6 +6,7 @@ import (
 )
 
 type Match struct {
+	id         int
 	totalKills int
 	players    []string
 	killCount  map[string]int
@@ -13,17 +14,19 @@ type Match struct {
 
 func Parse(log string) {
 	var waitgroup sync.WaitGroup
+	var matchNumber int = 0
 
 	lines := strings.Split(log, "\n")
 
-	for i, line := range lines {
+	for lineNumber, line := range lines {
 		line := strings.TrimSpace(line)
 		tokens := strings.Split(line, " ")
 
 		if len(tokens) > 2 {
 			if tokens[1] == "InitGame:" {
 				waitgroup.Add(1)
-				go extractMatch(lines, i, &waitgroup)
+				matchNumber++
+				go extractMatch(lines, lineNumber+1, matchNumber, &waitgroup)
 			}
 		}
 	}
@@ -31,28 +34,32 @@ func Parse(log string) {
 	waitgroup.Wait()
 }
 
-func extractMatch(lines []string, lineNumber int, waitgroup *sync.WaitGroup) Match {
+func extractMatch(lines []string, lineNumber int, matchNumber int, waitgroup *sync.WaitGroup) Match {
 	defer waitgroup.Done()
 
 	// Match data
 	var match Match = Match{
+		id:         matchNumber,
 		totalKills: 0,
 		players:    make([]string, 0),
 		killCount:  make(map[string]int),
 	}
 
-	for {
+	for lineNumber < len(lines) {
 		line := strings.TrimSpace(lines[lineNumber])
 		tokens := strings.Split(line, " ")
 		if len(tokens) > 1 {
 			if tokens[1] == "Kill:" {
+				//println(line)
 				match.totalKills++
-			} else if tokens[1] == "ShutdownGame:" {
-				println(match.totalKills)
+			} else if tokens[1] == "InitGame:" {
+				//println(line)
+				println("Match", match.id, "TotalKills", match.totalKills)
 				return match
 			}
 		}
 		lineNumber++
 	}
 
+	return match
 }
