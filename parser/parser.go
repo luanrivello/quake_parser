@@ -55,6 +55,4 @@ func extractMatch(lines []string, lineNumber int, waitgroup *sync.WaitGroup) Mat
 		lineNumber++
 	}
 
-	println(match.totalKills)
-	return match
 }
