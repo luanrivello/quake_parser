@@ -64,8 +64,7 @@ func extractMatch(lines []string, lineNumber int, matchNumber int, waitgroup *sy
 
 				//* Player name
 			} else if tokens[1] == "ClientUserinfoChanged:" {
-				//fmt.Println(tokens[3])
-				regex := regexp.MustCompile(`(\w+|\w+ )+`) 
+				regex := regexp.MustCompile(`\\(\w+|\w+ )+\\`)
 				player := regex.FindString(strings.Join(tokens[3:], " "))
 				if len(player) > 1 {
 					player := strings.ReplaceAll(player, "\\", "")
@@ -73,8 +72,6 @@ func extractMatch(lines []string, lineNumber int, matchNumber int, waitgroup *sy
 				} else {
 					fmt.Println("No match found")
 				}
-				// extract name
-				// check if exists
 
 				//* End of match
 			} else if tokens[1] == "InitGame:" {
