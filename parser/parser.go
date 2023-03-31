@@ -23,7 +23,7 @@ func Parse(log string) {
 		if len(tokens) > 2 {
 			if tokens[1] == "InitGame:" {
 				waitgroup.Add(1)
-				go extractMatch(lines, i, waitgroup)
+				go extractMatch(lines, i, &waitgroup)
 				break
 			}
 		}
@@ -32,7 +32,9 @@ func Parse(log string) {
 	waitgroup.Wait()
 }
 
-func extractMatch(lines []string, lineNumber int, waitgroup sync.WaitGroup) Match {
+func extractMatch(lines []string, lineNumber int, waitgroup *sync.WaitGroup) Match {
+	defer waitgroup.Done()
+
 	// Match data
 	var match Match = Match{
 		totalKills: 0,
@@ -50,7 +52,6 @@ func extractMatch(lines []string, lineNumber int, waitgroup sync.WaitGroup) Matc
 			} else if tokens[1] == "ShutdownGame:" {
 				println(line)
 				println(match.totalKills)
-				waitgroup.Done()
 				return match
 			}
 		}
