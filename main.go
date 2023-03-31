@@ -6,41 +6,47 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"quake_parser/parser"
 )
 
 func main() {
 
-	// Path to the log file
+	//* Path to the log file
 	var path string = getPath()
 	println(path)
 
-	// Get contents of the log file
+	//* Get contents of the log file
 	var content string = getContent(path)
 
-	// Print the file contents
-	fmt.Println(string(content))
+	//* Extract data
+	parser.Parse(content)
 
 }
 
 func getPath() string {
+	var path string
 
+	//* Get path from args or default path
 	if len(os.Args) > 1 {
-		return strings.Join(os.Args[1:], " ")
+		path = strings.Join(os.Args[1:], " ")
 	} else {
-		return "./data/qgames.log"
+		path = "./data/qgames.log"
 	}
 
-}
-
-func getContent(path string) string {
-
+	//* Convert to absolute path
 	fileAbsPath, err := filepath.Abs(path)
 	if err != nil {
 		fmt.Println("Error getting file path:", err)
 	}
 
-	// Get file contents
-	content, err := ioutil.ReadFile(fileAbsPath)
+	return fileAbsPath
+
+}
+
+func getContent(path string) string {
+
+	content, err := ioutil.ReadFile(path)
 	if err != nil {
 		fmt.Println("Error reading file:", err)
 	}
