@@ -2,6 +2,7 @@ package parser
 
 import (
 	"strings"
+	"sync"
 )
 
 type Match struct {
@@ -11,6 +12,7 @@ type Match struct {
 }
 
 func Parse(log string) {
+	var waitgroup sync.WaitGroup
 
 	lines := strings.Split(log, "\n")
 
@@ -20,13 +22,17 @@ func Parse(log string) {
 
 		if len(tokens) > 2 {
 			if tokens[1] == "InitGame:" {
-				go extractMatch(lines, i)
+				waitgroup.Add(1)
+				go extractMatch(lines, i, waitgroup)
+				break
 			}
 		}
 	}
+
+	waitgroup.Wait()
 }
 
-func extractMatch(lines []string, lineNumber int) Match {
+func extractMatch(lines []string, lineNumber int, waitgroup sync.WaitGroup) Match {
 	// Match data
 	var match Match = Match{
 		totalKills: 0,
@@ -44,6 +50,7 @@ func extractMatch(lines []string, lineNumber int) Match {
 			} else if tokens[1] == "ShutdownGame:" {
 				println(line)
 				println(match.totalKills)
+				waitgroup.Done()
 				return match
 			}
 		}
