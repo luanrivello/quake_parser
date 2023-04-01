@@ -43,7 +43,12 @@ func Parse(log string) map[string]*Match {
 				}
 
 				//matchs = append(matchs, &newMatch)
-				matchName := "game_" + strconv.Itoa(matchNumber)
+				var matchName string
+				if matchNumber < 10 {
+					matchName = "game_0" + strconv.Itoa(matchNumber)
+				} else {
+					matchName = "game_" + strconv.Itoa(matchNumber)
+				}
 				matchs[matchName] = &newMatch
 
 				//* Extract the data in parallel processe

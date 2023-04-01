@@ -10,7 +10,7 @@ func Write(matchs map[string]*Match) {
 }
 
 func createJsonReport(matchs map[string]*Match) {
-	jsonData, err := json.MarshalIndent(matchs, " ", " ")
+	jsonData, err := json.MarshalIndent(matchs, "", "  ")
 	if err != nil {
 		println("Error marshalling to JSON:", err)
 		return
