@@ -10,7 +10,7 @@ func Write(matchs []*Match) {
 }
 
 func createJsonReport(matchs []*Match) {
-	jsonData, err := json.Marshal(matchs[0])
+	jsonData, err := json.MarshalIndent(matchs, " ", " ")
 	if err != nil {
 		println("Error marshalling to JSON:", err)
 		return
@@ -32,9 +32,9 @@ func createJsonReport(matchs []*Match) {
 
 func createReport(matchs []*Match) {
 	for _, match := range matchs {
-		println("-------------------------- Match", match.id, "Report --------------------------")
-		println("TotalKills:", match.totalKills)
-		for player, kills := range match.killCount {
+		println("-------------------------- Match", match.Id, "Report --------------------------")
+		println("TotalKills:", match.TotalKills)
+		for player, kills := range match.KillCount {
 			println(player, kills)
 		}
 	}

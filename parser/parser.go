@@ -9,10 +9,10 @@ import (
 
 // * Match data
 type Match struct {
-	id         int            `json:"id"`
-	totalKills int            `json:"total_kills"`
-	players    []string       `json:"players"`
-	killCount  map[string]int `json:"kill_count"`
+	Id         int            `json:"id"`
+	TotalKills int            `json:"total_kills"`
+	Players    []string       `json:"players"`
+	KillCount  map[string]int `json:"kill_count"`
 }
 
 func Parse(log string) []*Match {
@@ -36,10 +36,10 @@ func Parse(log string) []*Match {
 				waitgroup.Add(1)
 				matchNumber++
 				var newMatch Match = Match{
-					id:         matchNumber,
-					totalKills: 0,
-					players:    make([]string, 0),
-					killCount:  make(map[string]int),
+					Id:         matchNumber,
+					TotalKills: 0,
+					Players:    make([]string, 0),
+					KillCount:  make(map[string]int),
 				}
 				matchs = append(matchs, &newMatch)
 
@@ -84,7 +84,7 @@ func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 
 func registerKill(match *Match, tokens []string) {
 	//* Add total kills
-	match.totalKills++
+	match.TotalKills++
 
 	//* Extract killer name
 	regex := regexp.MustCompile(`^.* killed`)
@@ -94,7 +94,7 @@ func registerKill(match *Match, tokens []string) {
 	//* If killer was not <world>
 	if killer != "<world>" {
 		//* Register kill
-		match.killCount[killer]++
+		match.KillCount[killer]++
 	} else {
 		//* Extract victims name
 		regex := regexp.MustCompile(`killed .* by`)
@@ -102,7 +102,7 @@ func registerKill(match *Match, tokens []string) {
 		victim = victim[7 : len(victim)-3]
 
 		//* Subtract kill from the victim of <world>
-		match.killCount[victim]--
+		match.KillCount[victim]--
 	}
 }
 
@@ -113,11 +113,11 @@ func registerPlayer(match *Match, tokens []string) {
 
 	if len(player) > 1 {
 		//* Register new player
-		if contains(match.players, player) {
+		if contains(match.Players, player) {
 			return
 		} else {
-			match.players = append(match.players, player)
-			match.killCount[player] = 0
+			match.Players = append(match.Players, player)
+			match.KillCount[player] = 0
 		}
 	} else {
 		fmt.Println("No match found")
