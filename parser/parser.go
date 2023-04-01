@@ -97,13 +97,18 @@ func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 
 func registerKill(match *Match, tokens []string) {
 	match.totalKills++
-	
+
 	regex := regexp.MustCompile(`^.* killed`)
 	killer := regex.FindString(strings.Join(tokens[5:], " "))
-	killer = killer[0:len(killer)-7] 
-	
+	killer = killer[0 : len(killer)-7]
+
 	if killer != "<world>" {
 		match.killCount[killer]++
+	} else {
+		regex := regexp.MustCompile(`killed .* by`)
+		victim := regex.FindString(strings.Join(tokens[5:], " "))
+		victim = victim[7:len(victim)-3]
+		match.killCount[victim]--
 	}
 
 }
