@@ -31,7 +31,18 @@ func Parse(log string) {
 			if tokens[1] == "InitGame:" {
 				waitgroup.Add(1)
 				matchNumber++
-				go extractMatchData(lines, lineNumber+1, matchNumber, &waitgroup)
+
+				//* New Match
+				var newMatch Match = Match{
+					id:         matchNumber,
+					totalKills: 0,
+					players:    make([]string, 0),
+					killCount:  make(map[string]int),
+				}
+				matchs = append(matchs, newMatch)
+
+				go extractMatchData(&newMatch, lines, lineNumber+1, &waitgroup)
+
 				if matchNumber == 2 {
 					break
 				}
@@ -41,25 +52,17 @@ func Parse(log string) {
 
 	//* Wait processes
 	waitgroup.Wait()
-	
+
 	//* Create report
 	createReport(matchs)
 }
 
 func createReport(matchs []Match) {
-	
+
 }
 
-func extractMatchData(lines []string, lineNumber int, matchNumber int, waitgroup *sync.WaitGroup) Match {
+func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *sync.WaitGroup) Match {
 	defer waitgroup.Done()
-
-	//* Match data
-	var match Match = Match{
-		id:         matchNumber,
-		totalKills: 0,
-		players:    make([]string, 0),
-		killCount:  make(map[string]int),
-	}
 
 	//* Log lines form specific match
 	for lineNumber < len(lines) {
