@@ -84,20 +84,19 @@ func extractMatch(lines []string, lineNumber int, matchNumber int, waitgroup *sy
 }
 
 func registerPlayer(match *Match, tokens []string) {
+
 	//* Extract Player Name
 	regex := regexp.MustCompile(`[^\\n](\w*|\w* )*`)
 	player := regex.FindString(strings.Join(tokens[3:], " "))
 	if len(player) > 1 {
-		//println(player)
+		//* Register new player
+		if contains(match.players, player) {
+			return
+		} else {
+			match.players = append(match.players, player)
+		}
 	} else {
 		fmt.Println("No match found")
-	}
-
-	//* Register new player
-	if contains(match.players, player) {
-		return
-	} else {
-		match.players = append(match.players, player)
 	}
 
 }
