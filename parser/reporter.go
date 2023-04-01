@@ -5,11 +5,11 @@ import (
 	"os"
 )
 
-func Write(matchs []*Match) {
+func Write(matchs map[string]*Match) {
 	createJsonReport(matchs)
 }
 
-func createJsonReport(matchs []*Match) {
+func createJsonReport(matchs map[string]*Match) {
 	jsonData, err := json.MarshalIndent(matchs, " ", " ")
 	if err != nil {
 		println("Error marshalling to JSON:", err)
@@ -30,9 +30,9 @@ func createJsonReport(matchs []*Match) {
 	}
 }
 
-func createReport(matchs []*Match) {
-	for _, match := range matchs {
-		println("-------------------------- Match", match.Id, "Report --------------------------")
+func createReport(matchs map[string]*Match) {
+	for index, match := range matchs {
+		println("-------------------------- " + index + "Report --------------------------")
 		println("TotalKills:", match.TotalKills)
 		for player, kills := range match.KillCount {
 			println(player, kills)

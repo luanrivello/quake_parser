@@ -3,22 +3,23 @@ package parser
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 )
 
 // * Match data
 type Match struct {
-	Id         int            `json:"id"`
+	//Id         int            `json:"game"`
 	TotalKills int            `json:"total_kills"`
 	Players    []string       `json:"players"`
-	KillCount  map[string]int `json:"kill_count"`
+	KillCount  map[string]int `json:"kills"`
 }
 
-func Parse(log string) []*Match {
+func Parse(log string) map[string]*Match {
 	//* Keep track of matches parallel processes
 	var waitgroup sync.WaitGroup
-	var matchs []*Match = make([]*Match, 0)
+	var matchs map[string]*Match = make(map[string]*Match, 0)
 	var matchNumber int = 0
 
 	//* Log lines as array
@@ -36,12 +37,15 @@ func Parse(log string) []*Match {
 				waitgroup.Add(1)
 				matchNumber++
 				var newMatch Match = Match{
-					Id:         matchNumber,
+					//Id:         matchNumber,
 					TotalKills: 0,
 					Players:    make([]string, 0),
 					KillCount:  make(map[string]int),
 				}
-				matchs = append(matchs, &newMatch)
+
+				//matchs = append(matchs, &newMatch)
+				matchName := "game_" + strconv.Itoa(matchNumber)
+				matchs[matchName] = &newMatch
 
 				//* Extract the data in parallel processe
 				go extractMatchData(&newMatch, lines, lineNumber+1, &waitgroup)

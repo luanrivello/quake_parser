@@ -19,7 +19,7 @@ func main() {
 	var content string = getContent(path)
 
 	//* Extract data
-	var matchs []*parser.Match = parser.Parse(content)
+	var matchs map[string]*parser.Match = parser.Parse(content)
 
 	//* Write report
 	parser.Write(matchs)
