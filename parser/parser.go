@@ -69,6 +69,7 @@ func extractMatch(lines []string, lineNumber int, matchNumber int, waitgroup *sy
 
 			//* End of match
 			case "InitGame:":
+				println(strings.Join(match.players[:], ";"))
 				println("Match", match.id, "TotalKills", match.totalKills)
 				return match
 			}
@@ -77,6 +78,7 @@ func extractMatch(lines []string, lineNumber int, matchNumber int, waitgroup *sy
 		lineNumber++
 	}
 
+	println(strings.Join(match.players[:], ";"))
 	println("Match", match.id, "TotalKills", match.totalKills)
 	return match
 }
@@ -86,11 +88,26 @@ func registerPlayer(match *Match, tokens []string) {
 	regex := regexp.MustCompile(`\\(\w+|\w+ )+\\`)
 	player := regex.FindString(strings.Join(tokens[3:], " "))
 	if len(player) > 1 {
-		player := strings.ReplaceAll(player, "\\", "")
-		println(player)
+		player = strings.ReplaceAll(player, "\\", "")
+		//println(player)
 	} else {
 		fmt.Println("No match found")
 	}
-	
+
 	//* Register new player
+	if contains(match.players, player) {
+		return
+	} else {
+		match.players = append(match.players, player)
+	}
+
+}
+
+func contains(array []string, find string) bool {
+	for _, aux := range array {
+		if aux == find {
+			return true
+		}
+	}
+	return false
 }
