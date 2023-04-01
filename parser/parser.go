@@ -86,6 +86,7 @@ func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 			case "InitGame:":
 				//println(strings.Join(match.players[:], ";"))
 				//println("Match", match.id, "TotalKills", match.totalKills)
+				return
 			}
 		}
 
