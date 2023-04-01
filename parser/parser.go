@@ -9,10 +9,10 @@ import (
 
 // * Match data
 type Match struct {
-	id         int
-	totalKills int
-	players    []string
-	killCount  map[string]int
+	id         int            `json:"id"`
+	totalKills int            `json:"total_kills"`
+	players    []string       `json:"players"`
+	killCount  map[string]int `json:"kill_count"`
 }
 
 func Parse(log string) []*Match {
