@@ -36,13 +36,11 @@ func Parse(log string) map[string]*Match {
 				waitgroup.Add(1)
 				matchNumber++
 				var newMatch Match = Match{
-					//Id:         matchNumber,
 					TotalKills: 0,
 					Players:    make([]string, 0),
 					KillCount:  make(map[string]int),
 				}
 
-				//matchs = append(matchs, &newMatch)
 				var matchName string
 				if matchNumber < 10 {
 					matchName = "game_0" + strconv.Itoa(matchNumber)
