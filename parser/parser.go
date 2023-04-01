@@ -14,7 +14,7 @@ type Match struct {
 	killCount  map[string]int
 }
 
-func Parse(log string) {
+func Parse(log string) []*Match {
 	var waitgroup sync.WaitGroup
 	var matchs []*Match = make([]*Match, 0)
 	var matchNumber int = 0
@@ -49,18 +49,7 @@ func Parse(log string) {
 	//* Wait processes
 	waitgroup.Wait()
 
-	//* Create report
-	createReport(matchs)
-}
-
-func createReport(matchs []*Match) {
-	for _, match := range matchs {
-		println("-------------------------- Match", match.id, "Report --------------------------")
-		println("TotalKills:", match.totalKills)
-		for player, kills := range match.killCount {
-			println(player, kills)
-		}
-	}
+	return matchs
 }
 
 func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *sync.WaitGroup) {

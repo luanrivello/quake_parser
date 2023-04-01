@@ -19,7 +19,9 @@ func main() {
 	var content string = getContent(path)
 
 	//* Extract data
-	parser.Parse(content)
+	var matchs []*parser.Match = parser.Parse(content)
+	
+	parser.Write(matchs)
 
 }
 
