@@ -42,10 +42,6 @@ func Parse(log string) {
 				matchs = append(matchs, &newMatch)
 
 				go extractMatchData(&newMatch, lines, lineNumber+1, &waitgroup)
-
-				if matchNumber == 8 {
-					break
-				}
 			}
 		}
 	}
