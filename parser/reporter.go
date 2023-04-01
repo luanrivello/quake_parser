@@ -31,25 +31,26 @@ func createJsonReport(matchs map[string]*Match) {
 	}
 }
 
-type rank struct {
-	leaderboard map[int]string
+type Rank struct {
+	Leaderboard map[int]string `json:"player_ranking"`
 }
 
-func newRank(match Match) rank {
+func newRank(match Match) Rank {
 	var aux int = 1
-	var result rank = rank{
-		leaderboard: make(map[int]string),
+	var result Rank = Rank{
+		Leaderboard: make(map[int]string),
 	}
 
 	for player, _ := range match.KillCount {
-		result.leaderboard[aux] = player
+		result.Leaderboard[aux] = player			
+		aux++
 	}
 
 	return result
 }
 
 func createJsonRank(matchs map[string]*Match) {
-	var ranks map[string]rank = make(map[string]rank)
+	var ranks map[string]Rank = make(map[string]Rank)
 
 	for matchName, match := range matchs {
 		ranks[matchName] = newRank(*match)
