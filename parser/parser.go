@@ -16,7 +16,7 @@ type Match struct {
 
 func Parse(log string) {
 	var waitgroup sync.WaitGroup
-	var matchs []Match = make([]Match, 0)
+	var matchs []*Match = make([]*Match, 0)
 	var matchNumber int = 0
 
 	lines := strings.Split(log, "\n")
@@ -39,11 +39,11 @@ func Parse(log string) {
 					players:    make([]string, 0),
 					killCount:  make(map[string]int),
 				}
-				matchs = append(matchs, newMatch)
+				matchs = append(matchs, &newMatch)
 
 				go extractMatchData(&newMatch, lines, lineNumber+1, &waitgroup)
 
-				if matchNumber == 2 {
+				if matchNumber == 3 {
 					break
 				}
 			}
@@ -57,11 +57,15 @@ func Parse(log string) {
 	createReport(matchs)
 }
 
-func createReport(matchs []Match) {
-
+func createReport(matchs []*Match) {
+	for _, match := range matchs {
+		println("-------------------------------- Match", match.id, "Report --------------------------------")
+		println(strings.Join(match.players[:], ";"))
+		println("TotalKills", match.totalKills)
+	}
 }
 
-func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *sync.WaitGroup) Match {
+func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *sync.WaitGroup) {
 	defer waitgroup.Done()
 
 	//* Log lines form specific match
@@ -76,22 +80,20 @@ func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 
 			//* Player name
 			case "ClientUserinfoChanged:":
-				registerPlayer(&match, tokens)
+				registerPlayer(match, tokens)
 
 			//* End of match
 			case "InitGame:":
-				println(strings.Join(match.players[:], ";"))
-				println("Match", match.id, "TotalKills", match.totalKills)
-				return match
+				//println(strings.Join(match.players[:], ";"))
+				//println("Match", match.id, "TotalKills", match.totalKills)
 			}
 		}
 
 		lineNumber++
 	}
 
-	println(strings.Join(match.players[:], ";"))
-	println("Match", match.id, "TotalKills", match.totalKills)
-	return match
+	//println(strings.Join(match.players[:], ";"))
+	//println("Match", match.id, "TotalKills", match.totalKills)
 }
 
 func registerPlayer(match *Match, tokens []string) {
