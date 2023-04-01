@@ -16,6 +16,7 @@ type Match struct {
 
 func Parse(log string) {
 	var waitgroup sync.WaitGroup
+	var matchs []Match = make([]Match, 0)
 	var matchNumber int = 0
 
 	lines := strings.Split(log, "\n")
@@ -30,7 +31,7 @@ func Parse(log string) {
 			if tokens[1] == "InitGame:" {
 				waitgroup.Add(1)
 				matchNumber++
-				go extractMatch(lines, lineNumber+1, matchNumber, &waitgroup)
+				go extractMatchData(lines, lineNumber+1, matchNumber, &waitgroup)
 				if matchNumber == 2 {
 					break
 				}
@@ -40,9 +41,16 @@ func Parse(log string) {
 
 	//* Wait processes
 	waitgroup.Wait()
+	
+	//* Create report
+	createReport(matchs)
 }
 
-func extractMatch(lines []string, lineNumber int, matchNumber int, waitgroup *sync.WaitGroup) Match {
+func createReport(matchs []Match) {
+	
+}
+
+func extractMatchData(lines []string, lineNumber int, matchNumber int, waitgroup *sync.WaitGroup) Match {
 	defer waitgroup.Done()
 
 	//* Match data
@@ -84,10 +92,10 @@ func extractMatch(lines []string, lineNumber int, matchNumber int, waitgroup *sy
 }
 
 func registerPlayer(match *Match, tokens []string) {
-
 	//* Extract Player Name
 	regex := regexp.MustCompile(`[^\\n](\w*|\w* )*`)
 	player := regex.FindString(strings.Join(tokens[3:], " "))
+
 	if len(player) > 1 {
 		//* Register new player
 		if contains(match.players, player) {
@@ -98,7 +106,6 @@ func registerPlayer(match *Match, tokens []string) {
 	} else {
 		fmt.Println("No match found")
 	}
-
 }
 
 func contains(array []string, find string) bool {
