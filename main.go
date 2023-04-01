@@ -20,7 +20,8 @@ func main() {
 
 	//* Extract data
 	var matchs []*parser.Match = parser.Parse(content)
-	
+
+	//* Write report
 	parser.Write(matchs)
 
 }
@@ -42,16 +43,13 @@ func getPath() string {
 	}
 
 	return fileAbsPath
-
 }
 
 func getContent(path string) string {
-
 	content, err := ioutil.ReadFile(path)
 	if err != nil {
 		fmt.Println("Error reading file:", err)
 	}
 
 	return string(content)
-
 }
