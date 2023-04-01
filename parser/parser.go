@@ -43,7 +43,7 @@ func Parse(log string) {
 
 				go extractMatchData(&newMatch, lines, lineNumber+1, &waitgroup)
 
-				if matchNumber == 3 {
+				if matchNumber == 8 {
 					break
 				}
 			}
@@ -76,7 +76,7 @@ func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 			switch tokens[1] {
 			//* Kill data
 			case "Kill:":
-				match.totalKills++
+				registerKill(match, tokens)
 
 			//* Player name
 			case "ClientUserinfoChanged:":
@@ -93,6 +93,19 @@ func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 
 }
 
+func registerKill(match *Match, tokens []string) {
+	match.totalKills++
+	
+	regex := regexp.MustCompile(`^.* killed`)
+	killer := regex.FindString(strings.Join(tokens[5:], " "))
+	killer = killer[0:len(killer)-7] 
+	
+	if killer != "<world>" {
+		match.killCount[killer]++
+	}
+
+}
+
 func registerPlayer(match *Match, tokens []string) {
 	//* Extract Player Name
 	regex := regexp.MustCompile(`[^\\n](\w*|\w* )*`)
@@ -104,6 +117,7 @@ func registerPlayer(match *Match, tokens []string) {
 			return
 		} else {
 			match.players = append(match.players, player)
+			match.killCount[player] = 0
 		}
 	} else {
 		fmt.Println("No match found")
