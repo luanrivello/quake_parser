@@ -10,7 +10,6 @@ import (
 
 // * Match data
 type Match struct {
-	//Id         int            `json:"game"`
 	TotalKills int            `json:"total_kills"`
 	Players    []string       `json:"players"`
 	KillCount  map[string]int `json:"kills"`
