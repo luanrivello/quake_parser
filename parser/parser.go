@@ -60,8 +60,10 @@ func Parse(log string) {
 func createReport(matchs []*Match) {
 	for _, match := range matchs {
 		println("-------------------------- Match", match.id, "Report --------------------------")
-		println("TotalKills", match.totalKills)
-		println(strings.Join(match.players[:], ";"))
+		println("TotalKills:", match.totalKills)
+		for player, kills := range match.killCount {
+			println(player, kills)
+		}
 	}
 }
 
