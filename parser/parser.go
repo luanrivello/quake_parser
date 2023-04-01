@@ -8,11 +8,30 @@ import (
 	"sync"
 )
 
-//* Match data
+// * Match data
 type Match struct {
 	TotalKills int            `json:"total_kills"`
 	Players    []string       `json:"players"`
 	KillCount  map[string]int `json:"kills"`
+}
+
+func NewMatch(matchs map[string]*Match, matchNumber int) *Match {
+	var newMatch Match = Match{
+		TotalKills: 0,
+		Players:    make([]string, 0),
+		KillCount:  make(map[string]int),
+	}
+
+	var matchName string
+	if matchNumber < 10 {
+		matchName = "game_0" + strconv.Itoa(matchNumber)
+	} else {
+		matchName = "game_" + strconv.Itoa(matchNumber)
+	}
+
+	matchs[matchName] = &newMatch
+
+	return &newMatch
 }
 
 func Parse(log string) map[string]*Match {
@@ -35,22 +54,11 @@ func Parse(log string) map[string]*Match {
 				//* New Match
 				waitgroup.Add(1)
 				matchNumber++
-				var newMatch Match = Match{
-					TotalKills: 0,
-					Players:    make([]string, 0),
-					KillCount:  make(map[string]int),
-				}
 
-				var matchName string
-				if matchNumber < 10 {
-					matchName = "game_0" + strconv.Itoa(matchNumber)
-				} else {
-					matchName = "game_" + strconv.Itoa(matchNumber)
-				}
-				matchs[matchName] = &newMatch
+				newMatch := NewMatch(matchs, matchNumber)
 
 				//* Extract the data in parallel processe
-				go extractMatchData(&newMatch, lines, lineNumber+1, &waitgroup)
+				go extractMatchData(newMatch, lines, lineNumber+1, &waitgroup)
 			}
 		}
 	}

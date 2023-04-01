@@ -30,12 +30,13 @@ func createJsonReport(matchs map[string]*Match) {
 	}
 }
 
-func createReport(matchs map[string]*Match) {
-	for index, match := range matchs {
-		println("-------------------------- " + index + "Report --------------------------")
-		println("TotalKills:", match.TotalKills)
-		for player, kills := range match.KillCount {
-			println(player, kills)
-		}
-	}
-}
+//* Print report
+//func createReport(matchs map[string]*Match) {
+//	for index, match := range matchs {
+//		println("-------------------------- " + index + "Report --------------------------")
+//		println("TotalKills:", match.TotalKills)
+//		for player, kills := range match.KillCount {
+//			println(player, kills)
+//		}
+//	}
+//}
