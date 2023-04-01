@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-// * Match data
+//* Match data
 type Match struct {
 	TotalKills int            `json:"total_kills"`
 	Players    []string       `json:"players"`
@@ -70,15 +70,15 @@ func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 
 		if len(tokens) > 1 {
 			switch tokens[1] {
-			//* Kill log
+			//* Kill log line
 			case "Kill:":
 				registerKill(match, tokens)
 
-			//* Player log
+			//* Player log line
 			case "ClientUserinfoChanged:":
 				registerPlayer(match, tokens)
 
-			//* Another match is starting
+			//* Another match has started
 			case "InitGame:":
 				return
 			}
