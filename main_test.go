@@ -10,13 +10,6 @@ func TestMain(t *testing.T) {
 	os.Args = []string{"program"}
 	os.Remove("./report/report.json")
 
-	//* Mock input file
-	err := ioutil.WriteFile("./data/test.log", []byte("test log file"), 0644)
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer os.Remove("./data/test.log")
-
 	//* Run main function
 	main()
 
@@ -58,6 +51,13 @@ func TestGetPath(t *testing.T) {
 
 func TestGetContent(t *testing.T) {
 	t.Run("Test with valid path", func(t *testing.T) {
+		//* Mock input file
+		err := ioutil.WriteFile("./data/test.log", []byte("test log file"), 0644)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer os.Remove("./data/test.log")
+
 		expectedContent := "test log file"
 		actualContent, err := getContent("./data/test.log")
 		if err != nil {
