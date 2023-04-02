@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"quake_parser/parser"
@@ -13,7 +12,7 @@ import (
 func main() {
 	println("---------- Quake Log Parser ----------")
 
-	//* Path to the log file
+	//* Get path to the log file
 	path, err := getPath()
 	if err != nil {
 		fmt.Println("Error getting file path:", err)
@@ -21,6 +20,7 @@ func main() {
 	}
 
 	//* Get contents of the log file
+	println("Reading log file at", path)
 	content, err := getContent(path)
 	if err != nil {
 		fmt.Println("Error reading file:", err)
@@ -48,15 +48,7 @@ func getPath() (string, error) {
 		path = "./data/qgames.log"
 	}
 
-	println("Reading log file at", path)
-
-	//* Convert to absolute path
-	fileAbsPath, err := filepath.Abs(path)
-	if err != nil {
-		return "", err
-	}
-
-	return fileAbsPath, nil
+	return path, nil
 }
 
 func getContent(path string) (string, error) {
