@@ -35,7 +35,7 @@ func writeJsonToFile(data interface{}, fileName string) {
 }
 
 //* Print report
-//func createReport(matchs map[string]*Match) {
+//func printReport(matchs map[string]*Match) {
 //	for index, match := range matchs {
 //		println("-------------------------- " + index + "Report --------------------------")
 //		println("TotalKills:", match.TotalKills)
