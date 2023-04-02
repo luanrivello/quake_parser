@@ -23,13 +23,22 @@ func newRank(match Match) Rank {
 	var result Rank = Rank{
 		Leaderboard: make(map[int]string),
 	}
+	leaderboard := result.Leaderboard
 
 	//* Fill ranking
 	for i := 1; i < len(match.Players)+1; i++ {
-		result.Leaderboard[i] = match.Players[i-1]
+		leaderboard[i] = match.Players[i-1]
 	}
 
 	//* Order by kills
+	n := len(leaderboard)
+	for i := 1; i <= n; i++ {
+		for j := 1; j <= n-i; j++ {
+			if match.KillCount[leaderboard[j]] < match.KillCount[leaderboard[j+1]] {
+				leaderboard[j], leaderboard[j+1] = leaderboard[j+1], leaderboard[j]
+			}
+		}
+	}
 
 	return result
 }
