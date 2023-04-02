@@ -6,7 +6,7 @@
 git clone https://github.com/luanrivello/quake_parser
 cd quake_parser
 ```
-- You can run the programm with no arguments defaulting the log file to be read to ./data/qgames.log
+- You can run the programm with no arguments defaulting the log file to ./data/qgames.log
 ```bash
 go run main.go
 ```
