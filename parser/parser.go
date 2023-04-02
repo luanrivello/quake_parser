@@ -3,7 +3,6 @@ package parser
 import (
 	"fmt"
 	"regexp"
-	"strconv"
 	"strings"
 	"sync"
 )
@@ -26,12 +25,7 @@ func NewMatch(matchs map[string]*Match, matchNumber int) *Match {
 
 	fillMeans(&newMatch.KillMeans)
 
-	var matchName string
-	if matchNumber < 10 {
-		matchName = "game_0" + strconv.Itoa(matchNumber)
-	} else {
-		matchName = "game_" + strconv.Itoa(matchNumber)
-	}
+	var matchName string = fmt.Sprintf("game_%02d", matchNumber)
 
 	matchs[matchName] = &newMatch
 
