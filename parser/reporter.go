@@ -7,51 +7,10 @@ import (
 
 func Write(matchs map[string]*Match) {
 	writeGroupedInformation(matchs)
-	writePlayerRanking(matchs)
 }
 
 func writeGroupedInformation(matchs map[string]*Match) {
-	writeJsonToFile(matchs, "grouped_information.json")
-}
-
-type Rank struct {
-	Leaderboard map[int]string `json:"player_ranking"`
-}
-
-func newRank(match Match) Rank {
-	//* Create rank
-	var result Rank = Rank{
-		Leaderboard: make(map[int]string),
-	}
-	leaderboard := result.Leaderboard
-
-	//* Fill ranking
-	for i := 1; i < len(match.Players)+1; i++ {
-		leaderboard[i] = match.Players[i-1]
-	}
-
-	//* Order by kills
-	n := len(leaderboard)
-	for i := 1; i <= n; i++ {
-		for j := 1; j <= n-i; j++ {
-			if match.KillCount[leaderboard[j]] < match.KillCount[leaderboard[j+1]] {
-				leaderboard[j], leaderboard[j+1] = leaderboard[j+1], leaderboard[j]
-			}
-		}
-	}
-
-	return result
-}
-
-func writePlayerRanking(matchs map[string]*Match) {
-	var ranks map[string]Rank = make(map[string]Rank)
-
-	//* Generate a rank for each match
-	for matchName, match := range matchs {
-		ranks[matchName] = newRank(*match)
-	}
-
-	writeJsonToFile(ranks, "player_ranking.json")
+	writeJsonToFile(matchs, "report")
 }
 
 func writeJsonToFile(data interface{}, fileName string) {

@@ -9,21 +9,23 @@ import (
 
 // * Match data
 type Match struct {
-	TotalKills int            `json:"total_kills"`
-	Players    []string       `json:"players"`
-	KillCount  map[string]int `json:"kills"`
-	//KillMeans  map[string]int `json:"kills_by_means"`
+	TotalKills  int            `json:"total_kills"`
+	Players     []string       `json:"players"`
+	KillCount   map[string]int `json:"kills"`
+	Leaderboard map[int]string `json:"player_ranking"`
+	KillMeans   map[string]int `json:"kills_by_means"`
 }
 
 func NewMatch(matchs map[string]*Match, matchNumber int) *Match {
 	var newMatch Match = Match{
-		TotalKills: 0,
-		Players:    make([]string, 0),
-		KillCount:  make(map[string]int),
-		//KillMeans:  make(map[string]int),
+		TotalKills:  0,
+		Players:     make([]string, 0),
+		KillCount:   make(map[string]int),
+		Leaderboard: make(map[int]string),
+		KillMeans:   make(map[string]int),
 	}
 
-	//fillMeans(&newMatch.KillMeans)
+	fillMeans(&newMatch.KillMeans)
 
 	var matchName string = fmt.Sprintf("game_%02d", matchNumber)
 
@@ -62,6 +64,26 @@ func fillMeans(means *map[string]int) {
 	(*means)["MOD_KAMIKAZE"] = 0
 	(*means)["MOD_JUICED"] = 0
 	(*means)["MOD_GRAPPL"] = 0
+}
+
+func newLeaderboard(match *Match) {
+	//* Create leaderboard
+	leaderboard := match.Leaderboard
+
+	//* Fill leaderboard
+	for i := 1; i < len(match.Players)+1; i++ {
+		leaderboard[i] = match.Players[i-1]
+	}
+
+	//* Order by kills
+	n := len(leaderboard)
+	for i := 1; i <= n; i++ {
+		for j := 1; j <= n-i; j++ {
+			if match.KillCount[leaderboard[j]] < match.KillCount[leaderboard[j+1]] {
+				leaderboard[j], leaderboard[j+1] = leaderboard[j+1], leaderboard[j]
+			}
+		}
+	}
 }
 
 func Parse(log string) map[string]*Match {
@@ -118,12 +140,15 @@ func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 
 			//* Another match has started
 			case "InitGame:":
+				newLeaderboard(match)
 				return
 			}
 		}
 
 		lineNumber++
 	}
+
+	newLeaderboard(match)
 }
 
 func registerKill(match *Match, tokens []string) {
@@ -148,6 +173,13 @@ func registerKill(match *Match, tokens []string) {
 		//* Subtract kill from the victim of <world>
 		match.KillCount[victim]--
 	}
+
+	//* Extract kill means
+	regex = regexp.MustCompile(`by .*`)
+	killMean := regex.FindString(strings.Join(tokens[5:], " "))
+	killMean = killMean[3:]
+
+	match.KillMeans[killMean]++
 }
 
 func registerPlayer(match *Match, tokens []string) {
