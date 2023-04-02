@@ -170,7 +170,6 @@ func registerKill(match *Match, tokens []string) {
 	killMean := regex.FindString(strings.Join(tokens[5:], " "))
 	killMean = killMean[3:]
 
-	//* If killer was not <world>
 	if killer != "<world>" {
 		//* Register kill
 		match.KillCount[killer]++
