@@ -25,16 +25,15 @@ func NewMatch(matchs map[string]*Match, matchNumber int) *Match {
 		KillMeans:   make(map[string]int),
 	}
 
-	fillMeans(&newMatch.KillMeans)
+	fillKillMeans(&newMatch.KillMeans)
 
 	var matchName string = fmt.Sprintf("game_%02d", matchNumber)
-
 	matchs[matchName] = &newMatch
 
 	return &newMatch
 }
 
-func fillMeans(means *map[string]int) {
+func fillKillMeans(means *map[string]int) {
 	(*means)["MOD_UNKNOWN"] = 0
 	(*means)["MOD_SHOTGUN"] = 0
 	(*means)["MOD_GAUNTLET"] = 0
@@ -104,9 +103,8 @@ func Parse(log string) map[string]*Match {
 		if len(tokens) > 2 {
 			if tokens[1] == "InitGame:" {
 				//* New Match
-				waitgroup.Add(1)
 				matchNumber++
-
+				waitgroup.Add(1)
 				newMatch := NewMatch(matchs, matchNumber)
 
 				//* Extract the data in parallel processe
@@ -148,6 +146,7 @@ func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 		lineNumber++
 	}
 
+	//* End of file
 	newLeaderboard(match)
 }
 
