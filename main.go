@@ -12,6 +12,7 @@ import (
 
 func main() {
 
+	println("---------- Quake Log Parser ----------")
 	//* Path to the log file
 	var path string = getPath()
 
@@ -19,11 +20,14 @@ func main() {
 	var content string = getContent(path)
 
 	//* Extract data
+	println("Extracting log data...")
 	var matchs map[string]*parser.Match = parser.Parse(content)
 
 	//* Write report
+	println("Writing report to ./report/report.json")
 	parser.Write(matchs)
 
+	println("-------------- Finished --------------")
 }
 
 func getPath() string {
@@ -35,6 +39,8 @@ func getPath() string {
 	} else {
 		path = "./data/qgames.log"
 	}
+
+	println("Reading log file at", path)
 
 	//* Convert to absolute path
 	fileAbsPath, err := filepath.Abs(path)
