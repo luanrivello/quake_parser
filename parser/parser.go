@@ -13,6 +13,7 @@ type Match struct {
 	TotalKills int            `json:"total_kills"`
 	Players    []string       `json:"players"`
 	KillCount  map[string]int `json:"kills"`
+	KillMeans  map[string]int `json:"kills_by_means"`
 }
 
 func NewMatch(matchs map[string]*Match, matchNumber int) *Match {
@@ -20,7 +21,10 @@ func NewMatch(matchs map[string]*Match, matchNumber int) *Match {
 		TotalKills: 0,
 		Players:    make([]string, 0),
 		KillCount:  make(map[string]int),
+		KillMeans:  make(map[string]int),
 	}
+
+	fillMeans(&newMatch.KillMeans)
 
 	var matchName string
 	if matchNumber < 10 {
@@ -32,6 +36,38 @@ func NewMatch(matchs map[string]*Match, matchNumber int) *Match {
 	matchs[matchName] = &newMatch
 
 	return &newMatch
+}
+
+func fillMeans(means *map[string]int) {
+	(*means)["MOD_UNKNOWN"] = 0
+	(*means)["MOD_SHOTGUN"] = 0
+	(*means)["MOD_GAUNTLET"] = 0
+	(*means)["MOD_MACHINEGUN"] = 0
+	(*means)["MOD_GRENADE"] = 0
+	(*means)["MOD_GRENADE_SPLASH"] = 0
+	(*means)["MOD_ROCKET"] = 0
+	(*means)["MOD_ROCKET_SPLASH"] = 0
+	(*means)["MOD_PLASMA"] = 0
+	(*means)["MOD_PLASMA_SPLASH"] = 0
+	(*means)["MOD_RAILGUN"] = 0
+	(*means)["MOD_LIGHTNING"] = 0
+	(*means)["MOD_BFG"] = 0
+	(*means)["MOD_BFG_SPLASH"] = 0
+	(*means)["MOD_WATER"] = 0
+	(*means)["MOD_SLIME"] = 0
+	(*means)["MOD_LAVA"] = 0
+	(*means)["MOD_CRUSH"] = 0
+	(*means)["MOD_TELEFRAG"] = 0
+	(*means)["MOD_FALLING"] = 0
+	(*means)["MOD_SUICIDE"] = 0
+	(*means)["MOD_TARGET_LASER"] = 0
+	(*means)["MOD_TRIGGER_HURT"] = 0
+	(*means)["MOD_NAIL"] = 0
+	(*means)["MOD_CHAINGUN"] = 0
+	(*means)["MOD_PROXIMITY_MINE"] = 0
+	(*means)["MOD_KAMIKAZE"] = 0
+	(*means)["MOD_JUICED"] = 0
+	(*means)["MOD_GRAPPL"] = 0
 }
 
 func Parse(log string) map[string]*Match {
