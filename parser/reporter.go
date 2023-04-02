@@ -14,19 +14,22 @@ func writeGroupedInformation(matchs map[string]*Match) {
 }
 
 func writeJsonToFile(data interface{}, fileName string) {
+	//* Generate JSON
 	jsonData, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
 		println("Error marshalling to JSON:", err)
 		return
 	}
 
-	file, err := os.Create("report/" + fileName + ".json")
+	//* Create File
+	file, err := os.Create("./report/" + fileName + ".json")
 	if err != nil {
 		println("Error creating JSON file:", err)
 		return
 	}
 	defer file.Close()
 
+	//* Write JSON to File
 	_, err = file.Write(jsonData)
 	if err != nil {
 		println("Error writing JSON to file:", err)
