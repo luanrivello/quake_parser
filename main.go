@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-
 	println("---------- Quake Log Parser ----------")
 	//* Path to the log file
 	var path string = getPath()
@@ -21,7 +20,7 @@ func main() {
 
 	//* Extract data
 	println("Extracting log data...")
-	var matchs map[string]*parser.Match = parser.Parse(content)
+	matchs := parser.Parse(content)
 
 	//* Write report
 	println("Writing report to ./report/report.json")
