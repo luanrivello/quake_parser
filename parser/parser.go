@@ -27,7 +27,7 @@ func NewMatch(matchs map[string]*Match, matchNumber int) *Match {
 
 	fillKillMeans(&newMatch.KillMeans)
 
-	var matchName string = fmt.Sprintf("game_%02d", matchNumber)
+	matchName := fmt.Sprintf("game_%02d", matchNumber)
 	matchs[matchName] = &newMatch
 
 	return &newMatch
