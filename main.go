@@ -12,11 +12,20 @@ import (
 
 func main() {
 	println("---------- Quake Log Parser ----------")
+
 	//* Path to the log file
-	var path string = getPath()
+	path, err := getPath()
+	if err != nil {
+		fmt.Println("Error getting file path:", err)
+		return
+	}
 
 	//* Get contents of the log file
-	var content string = getContent(path)
+	content, err := getContent(path)
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+		return
+	}
 
 	//* Extract data
 	println("Extracting log data...")
@@ -29,7 +38,7 @@ func main() {
 	println("-------------- Finished --------------")
 }
 
-func getPath() string {
+func getPath() (string, error) {
 	var path string
 
 	//* Get path from args or default path
@@ -44,17 +53,17 @@ func getPath() string {
 	//* Convert to absolute path
 	fileAbsPath, err := filepath.Abs(path)
 	if err != nil {
-		fmt.Println("Error getting file path:", err)
+		return "", err
 	}
 
-	return fileAbsPath
+	return fileAbsPath, nil
 }
 
-func getContent(path string) string {
+func getContent(path string) (string, error) {
 	content, err := ioutil.ReadFile(path)
 	if err != nil {
-		fmt.Println("Error reading file:", err)
+		return "", err
 	}
 
-	return string(content)
+	return string(content), nil
 }
