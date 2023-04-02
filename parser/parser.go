@@ -12,7 +12,7 @@ type Match struct {
 	TotalKills int            `json:"total_kills"`
 	Players    []string       `json:"players"`
 	KillCount  map[string]int `json:"kills"`
-	KillMeans  map[string]int `json:"kills_by_means"`
+	//KillMeans  map[string]int `json:"kills_by_means"`
 }
 
 func NewMatch(matchs map[string]*Match, matchNumber int) *Match {
@@ -20,10 +20,10 @@ func NewMatch(matchs map[string]*Match, matchNumber int) *Match {
 		TotalKills: 0,
 		Players:    make([]string, 0),
 		KillCount:  make(map[string]int),
-		KillMeans:  make(map[string]int),
+		//KillMeans:  make(map[string]int),
 	}
 
-	fillMeans(&newMatch.KillMeans)
+	//fillMeans(&newMatch.KillMeans)
 
 	var matchName string = fmt.Sprintf("game_%02d", matchNumber)
 

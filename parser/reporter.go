@@ -11,7 +11,7 @@ func Write(matchs map[string]*Match) {
 }
 
 func writeGroupedInformation(matchs map[string]*Match) {
-	writeJsonToFile(matchs)
+	writeJsonToFile(matchs, "grouped_information.json")
 }
 
 type Rank struct {
@@ -51,17 +51,17 @@ func writePlayerRanking(matchs map[string]*Match) {
 		ranks[matchName] = newRank(*match)
 	}
 
-	writeJsonToFile(ranks)
+	writeJsonToFile(ranks, "player_ranking.json")
 }
 
-func writeJsonToFile(data interface{}) {
+func writeJsonToFile(data interface{}, fileName string) {
 	jsonData, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
 		println("Error marshalling to JSON:", err)
 		return
 	}
 
-	file, err := os.Create("report/player_ranking.json")
+	file, err := os.Create("report/" + fileName + ".json")
 	if err != nil {
 		println("Error creating JSON file:", err)
 		return
