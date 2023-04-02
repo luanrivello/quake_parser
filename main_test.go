@@ -1,9 +1,30 @@
 package main
 
 import (
+	"io/ioutil"
 	"os"
 	"testing"
 )
+
+func TestMain(t *testing.T) {
+	os.Args = []string{"program"}
+	os.Remove("./report/report.json")
+
+	//* Mock input file
+	err := ioutil.WriteFile("./data/test.log", []byte("test log file"), 0644)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.Remove("./data/test.log")
+
+	//* Run main function
+	main()
+
+	//* Verify report file was written
+	if _, err := os.Stat("./report/report.json"); os.IsNotExist(err) {
+		t.Fatal("Report file was not created")
+	}
+}
 
 func TestGetPath(t *testing.T) {
 	t.Run("Test with no args", func(t *testing.T) {
