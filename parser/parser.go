@@ -160,26 +160,31 @@ func registerKill(match *Match, tokens []string) {
 	killer := regex.FindString(strings.Join(tokens[5:], " "))
 	killer = killer[0 : len(killer)-7]
 
+	//* Extract victim name
+	regex = regexp.MustCompile(`killed .* by`)
+	victim := regex.FindString(strings.Join(tokens[5:], " "))
+	victim = victim[7 : len(victim)-3]
+
+	//* Extract kill mean
+	regex = regexp.MustCompile(`by .*`)
+	killMean := regex.FindString(strings.Join(tokens[5:], " "))
+	killMean = killMean[3:]
+
 	//* If killer was not <world>
 	if killer != "<world>" {
 		//* Register kill
 		match.KillCount[killer]++
 	} else {
-		//* Extract victims name
-		regex := regexp.MustCompile(`killed .* by`)
-		victim := regex.FindString(strings.Join(tokens[5:], " "))
-		victim = victim[7 : len(victim)-3]
-
 		//* Subtract kill from the victim of <world>
 		match.KillCount[victim]--
 	}
 
-	//* Extract kill means
-	regex = regexp.MustCompile(`by .*`)
-	killMean := regex.FindString(strings.Join(tokens[5:], " "))
-	killMean = killMean[3:]
-
-	match.KillMeans[killMean]++
+	//* Check if it was suicide
+	if killer == victim {
+		match.KillMeans["MOD_SUICIDE"]++
+	} else {
+		match.KillMeans[killMean]++
+	}
 }
 
 func registerPlayer(match *Match, tokens []string) {
