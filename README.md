@@ -14,4 +14,4 @@ go run main.go
 ```bash
 go run main.go $LOGPATH
 ```
-- and a report will be generated in json format at the ./report folder
+- and a report will be generated in json format at ./report/report.json
