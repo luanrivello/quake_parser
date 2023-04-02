@@ -6,29 +6,12 @@ import (
 )
 
 func Write(matchs map[string]*Match) {
-	createJsonReport(matchs)
-	createJsonRank(matchs)
+	writeGroupedInformation(matchs)
+	writePlayerRanking(matchs)
 }
 
-func createJsonReport(matchs map[string]*Match) {
-	jsonData, err := json.MarshalIndent(matchs, "", "  ")
-	if err != nil {
-		println("Error marshalling to JSON:", err)
-		return
-	}
-
-	file, err := os.Create("report/grouped_information.json")
-	if err != nil {
-		println("Error creating JSON file:", err)
-		return
-	}
-	defer file.Close()
-
-	_, err = file.Write(jsonData)
-	if err != nil {
-		println("Error writing JSON to file:", err)
-		return
-	}
+func writeGroupedInformation(matchs map[string]*Match) {
+	writeJsonToFile(matchs)
 }
 
 type Rank struct {
@@ -36,27 +19,34 @@ type Rank struct {
 }
 
 func newRank(match Match) Rank {
-	var aux int = 1
+	//* Create rank
 	var result Rank = Rank{
 		Leaderboard: make(map[int]string),
 	}
 
-	for player, _ := range match.KillCount {
-		result.Leaderboard[aux] = player			
-		aux++
+	//* Fill ranking
+	for i := 1; i < len(match.Players)+1; i++ {
+		result.Leaderboard[i] = match.Players[i-1]
 	}
+
+	//* Order by kills
 
 	return result
 }
 
-func createJsonRank(matchs map[string]*Match) {
+func writePlayerRanking(matchs map[string]*Match) {
 	var ranks map[string]Rank = make(map[string]Rank)
 
+	//* Generate a rank for each match
 	for matchName, match := range matchs {
 		ranks[matchName] = newRank(*match)
 	}
 
-	jsonData, err := json.MarshalIndent(ranks, "", "  ")
+	writeJsonToFile(ranks)
+}
+
+func writeJsonToFile(data interface{}) {
+	jsonData, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
 		println("Error marshalling to JSON:", err)
 		return

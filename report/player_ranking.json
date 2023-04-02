@@ -13,10 +13,10 @@
   },
   "game_03": {
     "player_ranking": {
-      "1": "Zeh",
-      "2": "Dono da Bola",
-      "3": "Mocinha",
-      "4": "Isgalamido"
+      "1": "Dono da Bola",
+      "2": "Mocinha",
+      "3": "Isgalamido",
+      "4": "Zeh"
     }
   },
   "game_04": {
@@ -29,44 +29,44 @@
   },
   "game_05": {
     "player_ranking": {
-      "1": "Assasinu Credi",
-      "2": "Dono da Bola",
-      "3": "Isgalamido",
-      "4": "Zeh"
+      "1": "Dono da Bola",
+      "2": "Isgalamido",
+      "3": "Zeh",
+      "4": "Assasinu Credi"
     }
   },
   "game_06": {
     "player_ranking": {
-      "1": "Oootsimo",
-      "2": "UnnamedPlayer",
-      "3": "Maluquinho",
-      "4": "Assasinu Credi",
-      "5": "Fasano Again",
-      "6": "Isgalamido",
-      "7": "Zeh",
-      "8": "Dono da Bola",
+      "1": "Fasano Again",
+      "2": "Oootsimo",
+      "3": "Isgalamido",
+      "4": "Zeh",
+      "5": "Dono da Bola",
+      "6": "UnnamedPlayer",
+      "7": "Maluquinho",
+      "8": "Assasinu Credi",
       "9": "Mal"
     }
   },
   "game_07": {
     "player_ranking": {
-      "1": "Zeh",
-      "2": "Dono da Bola",
-      "3": "Mal",
-      "4": "Assasinu Credi",
-      "5": "Chessus",
-      "6": "Oootsimo",
-      "7": "Isgalamido"
+      "1": "Oootsimo",
+      "2": "Isgalamido",
+      "3": "Zeh",
+      "4": "Dono da Bola",
+      "5": "Mal",
+      "6": "Assasinu Credi",
+      "7": "Chessus"
     }
   },
   "game_08": {
     "player_ranking": {
-      "1": "Assasinu Credi",
-      "2": "Oootsimo",
-      "3": "Isgalamido",
-      "4": "Zeh",
-      "5": "Dono da Bola",
-      "6": "Mal"
+      "1": "Oootsimo",
+      "2": "Isgalamido",
+      "3": "Zeh",
+      "4": "Dono da Bola",
+      "5": "Mal",
+      "6": "Assasinu Credi"
     }
   },
   "game_09": {
@@ -82,58 +82,58 @@
   },
   "game_10": {
     "player_ranking": {
-      "1": "Dono da Bola",
-      "2": "Zeh",
-      "3": "Chessus",
-      "4": "Mal",
-      "5": "Assasinu Credi",
-      "6": "Isgalamido",
-      "7": "Oootsimo"
+      "1": "Oootsimo",
+      "2": "Dono da Bola",
+      "3": "Zeh",
+      "4": "Chessus",
+      "5": "Mal",
+      "6": "Assasinu Credi",
+      "7": "Isgalamido"
     }
   },
   "game_11": {
     "player_ranking": {
-      "1": "Chessus",
-      "2": "Assasinu Credi",
-      "3": "UnnamedPlayer",
-      "4": "Mal",
-      "5": "Dono da Bola",
-      "6": "Isgalamido",
-      "7": "Zeh",
-      "8": "Oootsimo"
+      "1": "Dono da Bola",
+      "2": "Isgalamido",
+      "3": "Zeh",
+      "4": "Oootsimo",
+      "5": "Chessus",
+      "6": "Assasinu Credi",
+      "7": "UnnamedPlayer",
+      "8": "Mal"
     }
   },
   "game_12": {
     "player_ranking": {
-      "1": "Oootsimo",
-      "2": "Chessus",
-      "3": "Assasinu Credi",
-      "4": "Mal",
-      "5": "Isgalamido",
-      "6": "Dono da Bola",
-      "7": "Zeh"
+      "1": "Isgalamido",
+      "2": "Dono da Bola",
+      "3": "Zeh",
+      "4": "Oootsimo",
+      "5": "Chessus",
+      "6": "Assasinu Credi",
+      "7": "Mal"
     }
   },
   "game_13": {
     "player_ranking": {
-      "1": "Oootsimo",
-      "2": "Chessus",
-      "3": "Assasinu Credi",
-      "4": "Mal",
-      "5": "Isgalamido",
-      "6": "Dono da Bola",
-      "7": "Zeh"
+      "1": "Isgalamido",
+      "2": "Dono da Bola",
+      "3": "Zeh",
+      "4": "Oootsimo",
+      "5": "Chessus",
+      "6": "Assasinu Credi",
+      "7": "Mal"
     }
   },
   "game_14": {
     "player_ranking": {
-      "1": "Mal",
-      "2": "Isgalamido",
-      "3": "Dono da Bola",
-      "4": "Zeh",
-      "5": "Oootsimo",
-      "6": "Chessus",
-      "7": "Assasinu Credi"
+      "1": "Isgalamido",
+      "2": "Dono da Bola",
+      "3": "Zeh",
+      "4": "Oootsimo",
+      "5": "Chessus",
+      "6": "Assasinu Credi",
+      "7": "Mal"
     }
   },
   "game_15": {
@@ -148,11 +148,11 @@
   },
   "game_16": {
     "player_ranking": {
-      "1": "Oootsimo",
-      "2": "Isgalamido",
-      "3": "Assasinu Credi",
-      "4": "Zeh",
-      "5": "Dono da Bola"
+      "1": "Dono da Bola",
+      "2": "Oootsimo",
+      "3": "Isgalamido",
+      "4": "Assasinu Credi",
+      "5": "Zeh"
     }
   },
   "game_17": {
@@ -168,42 +168,42 @@
   },
   "game_18": {
     "player_ranking": {
-      "1": "Zeh",
-      "2": "Mal",
-      "3": "Dono da Bola",
-      "4": "Oootsimo",
-      "5": "Isgalamido",
-      "6": "Assasinu Credi"
+      "1": "Dono da Bola",
+      "2": "Oootsimo",
+      "3": "Isgalamido",
+      "4": "Assasinu Credi",
+      "5": "Zeh",
+      "6": "Mal"
     }
   },
   "game_19": {
     "player_ranking": {
-      "1": "Mal",
-      "2": "Isgalamido",
-      "3": "Oootsimo",
-      "4": "Dono da Bola",
-      "5": "Assasinu Credi",
-      "6": "Zeh"
+      "1": "Isgalamido",
+      "2": "Oootsimo",
+      "3": "Dono da Bola",
+      "4": "Assasinu Credi",
+      "5": "Zeh",
+      "6": "Mal"
     }
   },
   "game_20": {
     "player_ranking": {
-      "1": "Oootsimo",
-      "2": "Dono da Bola",
-      "3": "Assasinu Credi",
-      "4": "Zeh",
-      "5": "Mal",
-      "6": "Isgalamido"
+      "1": "Isgalamido",
+      "2": "Oootsimo",
+      "3": "Dono da Bola",
+      "4": "Assasinu Credi",
+      "5": "Zeh",
+      "6": "Mal"
     }
   },
   "game_21": {
     "player_ranking": {
-      "1": "Assasinu Credi",
-      "2": "Zeh",
-      "3": "Mal",
-      "4": "Isgalamido",
-      "5": "Oootsimo",
-      "6": "Dono da Bola"
+      "1": "Isgalamido",
+      "2": "Oootsimo",
+      "3": "Dono da Bola",
+      "4": "Assasinu Credi",
+      "5": "Zeh",
+      "6": "Mal"
     }
   }
 }
