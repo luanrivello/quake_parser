@@ -33,11 +33,11 @@ func TestWrite(t *testing.T) {
 	matches := make(map[string]*parser.Match)
 	matches["test_match"] = match
 
-	//* Write the test matches to the temporary file
-	tempPath := "./report/report.json"
+	//* TEST CALL
 	parser.Write(matches)
 
 	//* Read the contents of the temporary file
+	tempPath := "./report/report.json"
 	fileData, err := ioutil.ReadFile(tempPath)
 	if err != nil {
 		t.Fatalf("Error reading temp file: %v", err)

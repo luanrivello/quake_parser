@@ -8,6 +8,7 @@ import (
 )
 
 func TestNewLeaderboard(t *testing.T) {
+	//* Create test data
 	match := &parser.Match{
 		TotalKills: 8,
 		Players:    []string{"Player1", "Player2", "Player3"},
@@ -20,8 +21,10 @@ func TestNewLeaderboard(t *testing.T) {
 		KillMeans:   map[string]int{},
 	}
 
+	//* TEST CALL
 	parser.NewLeaderboard(match)
 
+	//* Check leaderboard is ranked correctly
 	expectedLeaderboard := map[int]string{
 		1: "Player3",
 		2: "Player1",
@@ -34,6 +37,7 @@ func TestNewLeaderboard(t *testing.T) {
 }
 
 func TestRegisterKill(t *testing.T) {
+	//* Create test data
 	match := &parser.Match{
 		TotalKills:  0,
 		Players:     []string{"Player1", "Player2", "Player3"},
@@ -45,6 +49,7 @@ func TestRegisterKill(t *testing.T) {
 	line := "22:18 Kill: 2 2 7: Player1 killed Player2 by MOD_RAILGUN"
 	tokens := strings.Split(line, " ")
 
+	//* TEST CALL
 	parser.RegisterKill(match, tokens)
 
 	//* Check if total kills increased
