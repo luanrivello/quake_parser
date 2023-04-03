@@ -37,6 +37,72 @@ func TestNewLeaderboard(t *testing.T) {
 	}
 }
 
+func TestParse(t *testing.T) {
+	//* Create test data
+	log := `0:00 InitGame: map: map1
+    0:10 ClientUserinfoChanged: 2 n\player1\t\0\model\sarge\hmodel\sarge\c1\4\c2\5\hc\100\w\0\l\0
+    0:20 Kill: 2 3 7: player1 killed player2 by MOD_ROCKET
+    0:30 ClientUserinfoChanged: 3 n\player2\t\0\model\sarge\hmodel\sarge\c1\4\c2\5\hc\100\w\0\l\0
+    0:40 Kill: 3 2 7: player2 killed player1 by MOD_ROCKET
+    0:50 ShutdownGame:
+    0:51 InitGame: map: map2
+    0:60 ClientUserinfoChanged: 2 n\player3\t\0\model\sarge\hmodel\sarge\c1\4\c2\5\hc\100\w\0\l\0
+    0:70 Kill: 2 2 7: player3 killed player3 by MOD_ROCKET
+    0:80 ShutdownGame:`
+
+	expectedMatches := make(map[string]*parser.Match)
+	parser.NewMatch(expectedMatches, 1)
+	parser.NewMatch(expectedMatches, 2)
+
+	//* Match 1
+	expectedMatches["game_01"].TotalKills = 2
+	expectedMatches["game_01"].Players = []string{"player1", "player2"}
+	expectedMatches["game_01"].KillCount =
+		map[string]int{
+			"player1": 1,
+			"player2": 1,
+		}
+	expectedMatches["game_01"].Leaderboard =
+		map[int]string{
+			1: "player1",
+			2: "player2",
+		}
+	expectedMatches["game_01"].KillMeans["MOD_ROCKET"] = 2
+
+	//* Match 2
+	expectedMatches["game_02"].TotalKills = 1
+	expectedMatches["game_02"].Players = []string{"player3"}
+	expectedMatches["game_02"].KillCount =
+		map[string]int{
+			"player3": 1,
+		}
+	expectedMatches["game_02"].Leaderboard =
+		map[int]string{
+			1: "player3",
+		}
+	expectedMatches["game_02"].KillMeans["MOD_SUICIDE"] = 1
+
+	//* FUNCTION CALL
+	resultMatches := parser.Parse(log)
+
+	//* Check that the number of matches is correct
+	if len(resultMatches) != len(expectedMatches) {
+		t.Errorf("Unexpected number of matches. Got %v, expected %v", len(resultMatches), len(expectedMatches))
+	}
+
+	//* Check that each match has the expected data
+	for matchID, expectedMatch := range expectedMatches {
+		resultMatch, ok := resultMatches[matchID]
+		if !ok {
+			t.Errorf("Match with ID %v not found in result map", matchID)
+		}
+
+		if !reflect.DeepEqual(expectedMatch, resultMatch) {
+			t.Errorf("Unexpected match data for match %v. Got %v, expected %v", matchID, resultMatch, expectedMatch)
+		}
+	}
+}
+
 func TestExtractMatchData(t *testing.T) {
 	//* Create test data
 	match := &parser.Match{
