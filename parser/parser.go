@@ -65,7 +65,7 @@ func fillKillMeans(means *map[string]int) {
 	(*means)["MOD_GRAPPL"] = 0
 }
 
-func newLeaderboard(match *Match) {
+func NewLeaderboard(match *Match) {
 	//* Create leaderboard
 	leaderboard := match.Leaderboard
 
@@ -138,7 +138,7 @@ func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 
 			//* Another match has started
 			case "InitGame:":
-				newLeaderboard(match)
+				NewLeaderboard(match)
 				return
 			}
 		}
@@ -147,7 +147,7 @@ func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 	}
 
 	//* End of file
-	newLeaderboard(match)
+	NewLeaderboard(match)
 }
 
 func registerKill(match *Match, tokens []string) {
