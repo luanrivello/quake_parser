@@ -108,7 +108,7 @@ func Parse(log string) map[string]*Match {
 				newMatch := NewMatch(matchs, matchNumber)
 
 				//* Extract the data in parallel processe
-				go extractMatchData(newMatch, lines, lineNumber+1, &waitgroup)
+				go ExtractMatchData(newMatch, lines, lineNumber+1, &waitgroup)
 			}
 		}
 	}
@@ -118,7 +118,7 @@ func Parse(log string) map[string]*Match {
 	return matchs
 }
 
-func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *sync.WaitGroup) {
+func ExtractMatchData(match *Match, lines []string, lineNumber int, waitgroup *sync.WaitGroup) {
 	defer waitgroup.Done()
 
 	//* Iterate log lines of specific match

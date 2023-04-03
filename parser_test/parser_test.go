@@ -4,6 +4,7 @@ import (
 	"quake_parser/parser"
 	"reflect"
 	"strings"
+	"sync"
 	"testing"
 )
 
@@ -33,6 +34,54 @@ func TestNewLeaderboard(t *testing.T) {
 
 	if !reflect.DeepEqual(match.Leaderboard, expectedLeaderboard) {
 		t.Errorf("Expected leaderboard %v, but got %v", expectedLeaderboard, match.Leaderboard)
+	}
+}
+
+func TestExtractMatchData(t *testing.T) {
+	//* Create test data
+	match := &parser.Match{
+		Players:     make([]string, 0),
+		KillCount:   make(map[string]int),
+		Leaderboard: make(map[int]string),
+		KillMeans:   make(map[string]int),
+	}
+	lines := []string{
+		" 0:00 InitGame: started game",
+		" 0:01 ClientUserinfoChanged: 1 n\\Player1\\t\\0\\model\\uriel/uriel\\hmodel\\uriel/uriel\\g_redteam\\gib\\g_blueteam\\uriel",
+		" 0:01 ClientUserinfoChanged: 2 n\\Player2\\t\\0\\model\\uriel/uriel\\hmodel\\uriel/uriel\\g_redteam\\gib\\g_blueteam\\uriel",
+		" 0:02 Kill: 2 1 1: Player2 killed Player1 by MOD_RAILGUN",
+		" 0:03 ClientUserinfoChanged: 3 n\\Player3\\t\\0\\model\\sarge/sarge\\hmodel\\sarge/sarge\\g_redteam\\gib\\g_blueteam\\sarge",
+		" 0:04 Kill: 3 1 1: Player3 killed Player1 by MOD_RAILGUN",
+		" 0:05 ClientUserinfoChanged: 4 n\\Player4\\t\\0\\model\\sarge/sarge\\hmodel\\sarge/sarge\\g_redteam\\gib\\g_blueteam\\sarge",
+		" 0:06 Kill: 4 2 1: Player4 killed Player2 by MOD_RAILGUN",
+		" 0:07 ClientUserinfoChanged: 5 n\\Player5\\t\\0\\model\\sarge/sarge\\hmodel\\sarge/sarge\\g_redteam\\gib\\g_blueteam\\sarge",
+		" 0:08 Kill: 4 5 1: Player4 killed Player5 by MOD_RAILGUN",
+	}
+	waitgroup := &sync.WaitGroup{}
+	waitgroup.Add(1)
+
+	//* FUNCTION CALL
+	parser.ExtractMatchData(match, lines, 1, waitgroup)
+
+	//* Compare results
+	if match.TotalKills != 4 {
+		t.Errorf("Expected TotalKills to be 4, but got %d", match.TotalKills)
+	}
+	expectedPlayers := []string{"Player1", "Player2", "Player3", "Player4", "Player5"}
+	if !reflect.DeepEqual(match.Players, expectedPlayers) {
+		t.Errorf("Expected Players to be %v, but got %v", expectedPlayers, match.Players)
+	}
+	expectedKills := map[string]int{"Player1": 0, "Player2": 1, "Player3": 1, "Player4": 2, "Player5": 0}
+	if !reflect.DeepEqual(match.KillCount, expectedKills) {
+		t.Errorf("Expected KillCount to be %v, but got %v", expectedKills, match.KillCount)
+	}
+	expectedLeaderboard := map[int]string{1: "Player4", 2: "Player2", 3: "Player3", 4: "Player1", 5: "Player5"}
+	if !reflect.DeepEqual(match.Leaderboard, expectedLeaderboard) {
+		t.Errorf("Expected Leaderboard to be %v, but got %v", expectedLeaderboard, match.Leaderboard)
+	}
+	expectedKillMeans := map[string]int{"MOD_RAILGUN": 4}
+	if !reflect.DeepEqual(match.KillMeans, expectedKillMeans) {
+		t.Errorf("Expected KillMeans to be %v, but got %v", expectedKillMeans, match.KillMeans)
 	}
 }
 
