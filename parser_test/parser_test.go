@@ -138,3 +138,39 @@ func TestRegisterKill(t *testing.T) {
 		}
 	})
 }
+
+func TestRegisterPlayer(t *testing.T) {
+	//* Create test data
+	match := &parser.Match{
+		Players:     []string{},
+		KillCount:   map[string]int{},
+		Leaderboard: map[int]string{},
+		KillMeans:   map[string]int{},
+	}
+
+	line := "23:04 ClientUserinfoChanged: 2 n\\TestPlayer\\t\\0\\model\\sarge\\hmodel\\sarge\\g_redteam\\none\\g_blueteam\\red"
+	tokens := strings.Split(line, " ")
+
+	//* Register player
+	parser.RegisterPlayer(match, tokens)
+
+	//* Assert player has been registered
+	expectedPlayers := []string{"TestPlayer"}
+	if !reflect.DeepEqual(match.Players, expectedPlayers) {
+		t.Errorf("Expected players: %v, but got: %v", expectedPlayers, match.Players)
+	}
+
+	//* Assert player kill count is 0
+	expectedKillCount := 0
+	if match.KillCount["TestPlayer"] != expectedKillCount {
+		t.Errorf("Expected kill count for player TestPlayer: %d, but got: %d", expectedKillCount, match.KillCount["TestPlayer"])
+	}
+
+	//* Register existing player
+	parser.RegisterPlayer(match, tokens)
+
+	//* Assert player has not been registered again
+	if len(match.Players) != 1 {
+		t.Errorf("Expected only one player to be registered, but got: %d", len(match.Players))
+	}
+}

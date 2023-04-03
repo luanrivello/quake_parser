@@ -134,7 +134,7 @@ func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 
 			//* Player log line
 			case "ClientUserinfoChanged:":
-				registerPlayer(match, tokens)
+				RegisterPlayer(match, tokens)
 
 			//* Another match has started
 			case "InitGame:":
@@ -185,7 +185,7 @@ func RegisterKill(match *Match, tokens []string) {
 	}
 }
 
-func registerPlayer(match *Match, tokens []string) {
+func RegisterPlayer(match *Match, tokens []string) {
 	//* Extract Player Name
 	regex := regexp.MustCompile(`[^\\n](\w*|\w* )*`)
 	player := regex.FindString(strings.Join(tokens[3:], " "))
