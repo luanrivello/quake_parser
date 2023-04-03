@@ -15,3 +15,9 @@ go run main.go
 go run main.go $LOGPATH
 ```
 - and a report will be generated in json format at ./report/report.json
+
+## Testing
+- To run the unit tests, run the following command
+```bash
+go test -v ./...
+```

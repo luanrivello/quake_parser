@@ -192,7 +192,7 @@ func RegisterPlayer(match *Match, tokens []string) {
 
 	if len(player) > 1 {
 		//* Register new player
-		if contains(match.Players, player) {
+		if Contains(match.Players, player) {
 			return
 		} else {
 			match.Players = append(match.Players, player)
@@ -203,7 +203,7 @@ func RegisterPlayer(match *Match, tokens []string) {
 	}
 }
 
-func contains(array []string, find string) bool {
+func Contains(array []string, find string) bool {
 	for _, aux := range array {
 		if aux == find {
 			return true

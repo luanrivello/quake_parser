@@ -174,3 +174,19 @@ func TestRegisterPlayer(t *testing.T) {
 		t.Errorf("Expected only one player to be registered, but got: %d", len(match.Players))
 	}
 }
+
+func TestContains(t *testing.T) {
+	array := []string{"foo", "bar", "baz"}
+
+	t.Run("Test with existing value", func(t *testing.T) {
+		if !parser.Contains(array, "foo") {
+			t.Errorf("contains failed: expected true, got false")
+		}
+	})
+
+	t.Run("Test with non-existing value", func(t *testing.T) {
+		if parser.Contains(array, "qux") {
+			t.Errorf("contains failed: expected false, got true")
+		}
+	})
+}
