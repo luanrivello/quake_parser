@@ -33,7 +33,7 @@ func TestWrite(t *testing.T) {
 	matches := make(map[string]*parser.Match)
 	matches["test_match"] = match
 
-	//* TEST CALL
+	//* FUNCTION CALL
 	parser.Write(matches)
 
 	//* Read the contents of the temporary file

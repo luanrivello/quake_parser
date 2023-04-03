@@ -10,7 +10,6 @@ func TestMain(t *testing.T) {
 	os.Args = []string{"program"}
 	os.Remove("./report/report.json")
 
-	//* Run main function
 	main()
 
 	//* Verify report file was written
