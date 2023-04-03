@@ -130,7 +130,7 @@ func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 			switch tokens[1] {
 			//* Kill log line
 			case "Kill:":
-				registerKill(match, tokens)
+				RegisterKill(match, tokens)
 
 			//* Player log line
 			case "ClientUserinfoChanged:":
@@ -150,7 +150,7 @@ func extractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 	NewLeaderboard(match)
 }
 
-func registerKill(match *Match, tokens []string) {
+func RegisterKill(match *Match, tokens []string) {
 	//* Add total kills
 	match.TotalKills++
 

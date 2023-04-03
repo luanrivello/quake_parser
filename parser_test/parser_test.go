@@ -3,6 +3,7 @@ package parser
 import (
 	"quake_parser/parser"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -29,5 +30,40 @@ func TestNewLeaderboard(t *testing.T) {
 
 	if !reflect.DeepEqual(match.Leaderboard, expectedLeaderboard) {
 		t.Errorf("Expected leaderboard %v, but got %v", expectedLeaderboard, match.Leaderboard)
+	}
+}
+
+func TestRegisterKill(t *testing.T) {
+	match := &parser.Match{
+		TotalKills:  0,
+		Players:     []string{"Player1", "Player2", "Player3"},
+		KillCount:   map[string]int{},
+		Leaderboard: map[int]string{},
+		KillMeans:   map[string]int{},
+	}
+
+	line := "22:18 Kill: 2 2 7: Player1 killed Player2 by MOD_RAILGUN"
+	tokens := strings.Split(line, " ")
+
+	parser.RegisterKill(match, tokens)
+
+	//* Check if total kills increased
+	if match.TotalKills != 1 {
+		t.Errorf("registerKill did not increment TotalKills. Got %v, expected %v", match.TotalKills, 1)
+	}
+
+	//* Check if killer's kill count increased
+	if match.KillCount["Player1"] != 1 {
+		t.Errorf("registerKill did not register a kill for the killer. Got %v, expected %v", match.KillCount["Player1"], 1)
+	}
+
+	//* Check if victim's kill count remained the same
+	if match.KillCount["Player2"] != 0 {
+		t.Errorf("registerKill subtracted a kill from <world> instead of adding it to the victim. Got %v, expected %v", match.KillCount["Player2"], 0)
+	}
+
+	//* Check if kill means were updated
+	if match.KillMeans["MOD_RAILGUN"] != 1 {
+		t.Errorf("registerKill did not register the correct kill mean. Got %v, expected %v", match.KillMeans["MOD_RIFLE"], 1)
 	}
 }
