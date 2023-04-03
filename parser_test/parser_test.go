@@ -111,6 +111,8 @@ func TestExtractMatchData(t *testing.T) {
 		Leaderboard: make(map[int]string),
 		KillMeans:   make(map[string]int),
 	}
+	match.KillMeans["MOD_RAILGUN"] = 0
+
 	lines := []string{
 		" 0:00 InitGame: started game",
 		" 0:01 ClientUserinfoChanged: 1 n\\Player1\\t\\0\\model\\uriel/uriel\\hmodel\\uriel/uriel\\g_redteam\\gib\\g_blueteam\\uriel",
@@ -159,7 +161,7 @@ func TestRegisterKill(t *testing.T) {
 			Players:     []string{"Player1", "Player2", "Player3"},
 			KillCount:   map[string]int{},
 			Leaderboard: map[int]string{},
-			KillMeans:   map[string]int{},
+			KillMeans:   map[string]int{"MOD_RAILGUN": 0},
 		}
 
 		line := "22:18 Kill: 2 2 7: Player1 killed Player2 by MOD_RAILGUN"
@@ -196,7 +198,7 @@ func TestRegisterKill(t *testing.T) {
 			Players:     []string{"Player1", "Player2", "Player3"},
 			KillCount:   map[string]int{},
 			Leaderboard: map[int]string{},
-			KillMeans:   map[string]int{},
+			KillMeans:   map[string]int{"MOD_FALLING": 0},
 		}
 
 		line := "22:18 Kill: 2 2 7: <world> killed Player2 by MOD_FALLING"
