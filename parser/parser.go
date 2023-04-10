@@ -155,19 +155,30 @@ func RegisterKill(match *Match, tokens []string) {
 	match.TotalKills++
 
 	//* Extract killer name
-	regex := regexp.MustCompile(`^.* killed`)
-	killer := regex.FindString(strings.Join(tokens[5:], " "))
-	killer = killer[0 : len(killer)-7]
+	var i int = 5
+	var killer string
+	for tokens[i+1] != "killed" {
+		killer += tokens[i] + " "
+		i++
+	}
+	killer += tokens[i]
+	i = i + 2
 
 	//* Extract victim name
-	regex = regexp.MustCompile(`killed .* by`)
-	victim := regex.FindString(strings.Join(tokens[5:], " "))
-	victim = victim[7 : len(victim)-3]
+	var victim string
+	for tokens[i+1] != "by" {
+		victim += tokens[i] + " "
+		i++
+	}
+	victim += tokens[i]
+	i = i + 2
 
 	//* Extract kill mean
-	regex = regexp.MustCompile(`by .*`)
-	killMean := regex.FindString(strings.Join(tokens[5:], " "))
-	killMean = killMean[3:]
+	var killMean string
+	for i < len(tokens) {
+		killMean += tokens[i]
+		i++
+	}
 
 	if killer != "<world>" {
 		//* Register kill
