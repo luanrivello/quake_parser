@@ -254,7 +254,7 @@ func TestRegisterKill(t *testing.T) {
 			t.Errorf("registerKill did not register the correct kill mean. Got %v, expected %v", match.KillMeans["MOD_RIFLE"], 1)
 		}
 	})
-	
+
 	t.Run("Test unknown kill", func(t *testing.T) {
 		//* Create test data
 		match := &parser.Match{
@@ -286,7 +286,7 @@ func TestRegisterKill(t *testing.T) {
 			t.Errorf("registerKill did not register the correct kill mean. Got %v, expected %v", match.KillMeans["MOD_RIFLE"], 1)
 		}
 	})
-	
+
 }
 
 func TestRegisterPlayer(t *testing.T) {
@@ -298,32 +298,52 @@ func TestRegisterPlayer(t *testing.T) {
 		KillMeans:   map[string]int{},
 	}
 
-	line := "23:04 ClientUserinfoChanged: 2 n\\TestPlayer\\t\\0\\model\\sarge\\hmodel\\sarge\\g_redteam\\none\\g_blueteam\\red"
-	tokens := strings.Split(line, " ")
+	line1 := "23:04 ClientUserinfoChanged: 2 n\\TestPlayer\\t\\0\\model\\sarge\\hmodel\\sarge\\g_redteam\\none\\g_blueteam\\red"
+	line2 := "23:04 ClientUserinfoChanged: 2 n\\Test Player With Spaces\\t\\0\\model\\sarge\\hmodel\\sarge\\g_redteam\\none\\g_blueteam\\red"
+	tokens1 := strings.Split(line1, " ")
+	tokens2 := strings.Split(line2, " ")
 
 	t.Run("Test register player", func(t *testing.T) {
 		//* FUNCTION CALL
-		parser.RegisterPlayer(match, tokens)
+		parser.RegisterPlayer(match, tokens1)
 
 		//* Assert player has been registered
-		expectedPlayers := []string{"TestPlayer"}
-		if !reflect.DeepEqual(match.Players, expectedPlayers) {
-			t.Errorf("Expected players: %v, but got: %v", expectedPlayers, match.Players)
+		expectedPlayer := "TestPlayer"
+		if !reflect.DeepEqual(match.Players[0], expectedPlayer) {
+			t.Errorf("Expected players: %v, but got: %v", expectedPlayer, match.Players[0])
 		}
 
 		//* Assert player kill count is 0
 		expectedKillCount := 0
 		if match.KillCount["TestPlayer"] != expectedKillCount {
-			t.Errorf("Expected kill count for player TestPlayer: %d, but got: %d", expectedKillCount, match.KillCount["TestPlayer"])
+			t.Errorf("Expected kill count for player Test Player: %d, but got: %d", expectedKillCount, match.KillCount["TestPlayer"])
+		}
+	})
+
+	t.Run("Test register player with spaces", func(t *testing.T) {
+		//* FUNCTION CALL
+		parser.RegisterPlayer(match, tokens2)
+
+		//* Assert player has been registered
+		expectedPlayer := "Test Player With Spaces"
+		if !reflect.DeepEqual(match.Players[1], expectedPlayer) {
+			t.Errorf("Expected players: %v, but got: %v", expectedPlayer, match.Players[1])
+		}
+
+		//* Assert player kill count is 0
+		expectedKillCount := 0
+		if match.KillCount["TestPlayer"] != expectedKillCount {
+			t.Errorf("Expected kill count for player Test Player: %d, but got: %d", expectedKillCount, match.KillCount["TestPlayer"])
 		}
 	})
 
 	t.Run("Test register existing player", func(t *testing.T) {
 		//* FUNCTION CALL
-		parser.RegisterPlayer(match, tokens)
+		parser.RegisterPlayer(match, tokens1)
+		parser.RegisterPlayer(match, tokens2)
 
 		//* Assert player has not been registered again
-		if len(match.Players) != 1 {
+		if len(match.Players) != 2 {
 			t.Errorf("Expected only one player to be registered, but got: %d", len(match.Players))
 		}
 	})
