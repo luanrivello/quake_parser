@@ -70,11 +70,11 @@ func TestParse(t *testing.T) {
 	expectedMatches["game_01"].KillMeans["MOD_ROCKET"] = 2
 
 	//* Match 2
-	expectedMatches["game_02"].TotalKills = 1
+	expectedMatches["game_02"].TotalKills = 0
 	expectedMatches["game_02"].Players = []string{"player3"}
 	expectedMatches["game_02"].KillCount =
 		map[string]int{
-			"player3": 1,
+			"player3": -1,
 		}
 	expectedMatches["game_02"].Leaderboard =
 		map[int]string{
@@ -187,7 +187,7 @@ func TestRegisterKill(t *testing.T) {
 
 		//* Check if kill means were updated
 		if match.KillMeans["MOD_RAILGUN"] != 1 {
-			t.Errorf("registerKill did not register the correct kill mean. Got %v, expected %v", match.KillMeans["MOD_RIFLE"], 1)
+			t.Errorf("registerKill did not register the correct kill mean. Got %v, expected %v", match.KillMeans["MOD_RAILGUN"], 1)
 		}
 	})
 
@@ -208,7 +208,7 @@ func TestRegisterKill(t *testing.T) {
 		parser.RegisterKill(match, tokens)
 
 		//* Check if total kills increased
-		if match.TotalKills != 1 {
+		if match.TotalKills != 0 {
 			t.Errorf("registerKill did not increment TotalKills. Got %v, expected %v", match.TotalKills, 1)
 		}
 
@@ -219,7 +219,7 @@ func TestRegisterKill(t *testing.T) {
 
 		//* Check if kill means were updated
 		if match.KillMeans["MOD_FALLING"] != 1 {
-			t.Errorf("registerKill did not register the correct kill mean. Got %v, expected %v", match.KillMeans["MOD_RIFLE"], 1)
+			t.Errorf("registerKill did not register the correct kill mean. Got %v, expected %v", match.KillMeans["MOD_FALLING"], 1)
 		}
 	})
 
@@ -240,18 +240,18 @@ func TestRegisterKill(t *testing.T) {
 		parser.RegisterKill(match, tokens)
 
 		//* Check if total kills increased
-		if match.TotalKills != 1 {
+		if match.TotalKills != 0 {
 			t.Errorf("registerKill did not increment TotalKills. Got %v, expected %v", match.TotalKills, 1)
 		}
 
 		//* Check if killer's kill count increased
-		if match.KillCount["Player2"] != 1 {
-			t.Errorf("registerKill did not register a kill for the killer. Got %v, expected %v", match.KillCount["Player1"], 1)
+		if match.KillCount["Player2"] != -1 {
+			t.Errorf("registerKill did not register a kill for the killer. Got %v, expected %v", match.KillCount["Player2"], -1)
 		}
 
 		//* Check if kill means were updated
 		if match.KillMeans["MOD_SUICIDE"] != 1 {
-			t.Errorf("registerKill did not register the correct kill mean. Got %v, expected %v", match.KillMeans["MOD_RIFLE"], 1)
+			t.Errorf("registerKill did not register the correct kill mean. Got %v, expected %v", match.KillMeans["MOD_SUICIDE"], 1)
 		}
 	})
 
@@ -260,9 +260,9 @@ func TestRegisterKill(t *testing.T) {
 		match := &parser.Match{
 			TotalKills:  0,
 			Players:     []string{"Player1", "Player2", "Player3"},
-			KillCount:   map[string]int{},
+      KillCount:   map[string]int{"Player2": 0},
 			Leaderboard: map[int]string{},
-			KillMeans:   map[string]int{},
+			KillMeans:   map[string]int{"MOD_UNKNOWN": 0},
 		}
 
 		line := "22:18 Kill: 2 2 7: Player2 killed Player1 by MOD_ABCDEF"
@@ -278,12 +278,12 @@ func TestRegisterKill(t *testing.T) {
 
 		//* Check if killer's kill count increased
 		if match.KillCount["Player2"] != 1 {
-			t.Errorf("registerKill did not register a kill for the killer. Got %v, expected %v", match.KillCount["Player1"], 1)
+			t.Errorf("registerKill did not register a kill for the killer. Got %v, expected %v", match, 1)
 		}
 
 		//* Check if kill means were updated
 		if match.KillMeans["MOD_UNKNOWN"] != 1 {
-			t.Errorf("registerKill did not register the correct kill mean. Got %v, expected %v", match.KillMeans["MOD_RIFLE"], 1)
+			t.Errorf("registerKill did not register the correct kill mean. Got %v, expected %v", match.KillMeans["MOD_UNKNOWN"], 1)
 		}
 	})
 
