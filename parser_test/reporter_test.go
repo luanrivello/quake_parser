@@ -14,11 +14,7 @@ func TestWrite(t *testing.T) {
 	//* Create test data
 	match := &parser.Match{
 		TotalKills: 10,
-		Players:   map[int]string{
-			0:"Player1", 
-			1:"Player2", 
-			2:"Player3",
-		},
+		Players:    []string{"Player1", "Player2"},
 		KillCount: map[string]int{
 			"Player1": 5,
 			"Player2": 3,

@@ -2,7 +2,7 @@ package parser
 
 import (
 	"fmt"
-	"strconv"
+	"regexp"
 	"strings"
 	"sync"
 )
@@ -10,7 +10,7 @@ import (
 // * Match data
 type Match struct {
 	TotalKills  int            `json:"total_kills"`
-	Players     map[int]string `json:"players"`
+	Players     []string       `json:"players"`
 	KillCount   map[string]int `json:"kills"`
 	Leaderboard map[int]string `json:"player_ranking"`
 	KillMeans   map[string]int `json:"kills_by_means"`
@@ -19,7 +19,7 @@ type Match struct {
 func NewMatch(matchs map[string]*Match, matchNumber int) *Match {
 	var newMatch Match = Match{
 		TotalKills:  0,
-		Players:     make(map[int]string, 0),
+		Players:     make([]string, 0),
 		KillCount:   make(map[string]int),
 		Leaderboard: make(map[int]string),
 		KillMeans:   make(map[string]int),
@@ -70,10 +70,8 @@ func NewLeaderboard(match *Match) {
 	leaderboard := match.Leaderboard
 
 	//* Fill leaderboard
-	i := 1
-	for _, player := range match.Players {
-		leaderboard[i] = player
-		i++
+	for i := 1; i < len(match.Players)+1; i++ {
+		leaderboard[i] = match.Players[i-1]
 	}
 
 	//* Order by kills
@@ -136,8 +134,7 @@ func ExtractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 
 			//* Player log line
 			case "ClientUserinfoChanged:":
-				id, _ := strconv.Atoi(tokens[2])
-				RegisterPlayer(match, line, id)
+				RegisterPlayer(match, tokens)
 
 			//* Another match has started
 			case "InitGame:":
@@ -201,33 +198,17 @@ func RegisterKill(match *Match, tokens []string) {
 	}
 }
 
-func RegisterPlayer(match *Match, line string, id int) {
+func RegisterPlayer(match *Match, tokens []string) {
 	//* Extract Player Name
-	var player string
-
-	var i int = 28
-	for line[i] != '\\' {
-		i++
-	}
-	i++
-
-	var j int = i
-	for line[j] != '\\' {
-		j++
-	}
-	player = line[i:j]
+	regex := regexp.MustCompile(`[^\\n](\w*|\w* )*`)
+	player := regex.FindString(strings.Join(tokens[3:], " "))
 
 	if len(player) > 1 {
-		//* Register or not new player
-		oldPlayer, exists := match.Players[id]
-		if oldPlayer == player {
+		//* Register new player
+		if Contains(match.Players, player) {
 			return
-		} else if exists {
-			match.Players[id] = player
-			match.KillCount[player] = match.KillCount[oldPlayer]
-			delete(match.KillCount, oldPlayer)
 		} else {
-			match.Players[id] = player
+			match.Players = append(match.Players, player)
 			match.KillCount[player] = 0
 		}
 	} else {
