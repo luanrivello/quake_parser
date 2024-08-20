@@ -182,7 +182,7 @@ func RegisterKill(match *Match, tokens []string) {
 		match.KillCount[victim]--
 		match.KillMeans[killMean]++
 
-  } else if killer == victim {
+	} else if killer == victim {
 		match.KillCount[victim]--
 		match.KillMeans["MOD_SUICIDE"]++
 
