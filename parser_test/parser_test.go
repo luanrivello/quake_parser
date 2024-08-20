@@ -12,7 +12,11 @@ func TestNewLeaderboard(t *testing.T) {
 	//* Create test data
 	match := &parser.Match{
 		TotalKills: 8,
-		Players:    []string{"Player1", "Player2", "Player3"},
+		Players:   map[int]string{
+			2:"Player1", 
+			3:"Player2", 
+			4:"Player3",
+		},
 		KillCount: map[string]int{
 			"Player1": 2,
 			"Player2": 1,
@@ -46,7 +50,7 @@ func TestParse(t *testing.T) {
     0:40 Kill: 3 2 7: player2 killed player1 by MOD_ROCKET
     0:50 ShutdownGame:
     0:51 InitGame: map: map2
-    0:60 ClientUserinfoChanged: 2 n\player3\t\0\model\sarge\hmodel\sarge\c1\4\c2\5\hc\100\w\0\l\0
+    0:60 ClientUserinfoChanged: 4 n\player3\t\0\model\sarge\hmodel\sarge\c1\4\c2\5\hc\100\w\0\l\0
     0:70 Kill: 2 2 7: player3 killed player3 by MOD_ROCKET
     0:80 ShutdownGame:`
 
@@ -56,7 +60,11 @@ func TestParse(t *testing.T) {
 
 	//* Match 1
 	expectedMatches["game_01"].TotalKills = 2
-	expectedMatches["game_01"].Players = []string{"player1", "player2"}
+	expectedMatches["game_01"].Players = 
+		map[int]string{
+			2:"player1", 
+			3:"player2",
+		}	
 	expectedMatches["game_01"].KillCount =
 		map[string]int{
 			"player1": 1,
@@ -71,7 +79,7 @@ func TestParse(t *testing.T) {
 
 	//* Match 2
 	expectedMatches["game_02"].TotalKills = 1
-	expectedMatches["game_02"].Players = []string{"player3"}
+	expectedMatches["game_02"].Players = map[int]string{4:"player3"}
 	expectedMatches["game_02"].KillCount =
 		map[string]int{
 			"player3": 1,
@@ -106,7 +114,7 @@ func TestParse(t *testing.T) {
 func TestExtractMatchData(t *testing.T) {
 	//* Create test data
 	match := &parser.Match{
-		Players:     make([]string, 0),
+		Players:     make(map[int]string),
 		KillCount:   make(map[string]int),
 		Leaderboard: make(map[int]string),
 		KillMeans:   make(map[string]int),
@@ -135,7 +143,7 @@ func TestExtractMatchData(t *testing.T) {
 	if match.TotalKills != 4 {
 		t.Errorf("Expected TotalKills to be 4, but got %d", match.TotalKills)
 	}
-	expectedPlayers := []string{"Player1", "Player2", "Player3", "Player4", "Player5"}
+	expectedPlayers := map[int]string{1:"Player1", 2:"Player2", 3:"Player3", 4:"Player4", 5:"Player5"}
 	if !reflect.DeepEqual(match.Players, expectedPlayers) {
 		t.Errorf("Expected Players to be %v, but got %v", expectedPlayers, match.Players)
 	}
@@ -158,7 +166,11 @@ func TestRegisterKill(t *testing.T) {
 		//* Create test data
 		match := &parser.Match{
 			TotalKills:  0,
-			Players:     []string{"Player1", "Player2", "Player3"},
+		Players:   map[int]string{
+			0:"Player1", 
+			1:"Player2", 
+			2:"Player3",
+		},
 			KillCount:   map[string]int{},
 			Leaderboard: map[int]string{},
 			KillMeans:   map[string]int{"MOD_RAILGUN": 0},
@@ -195,7 +207,11 @@ func TestRegisterKill(t *testing.T) {
 		//* Create test data
 		match := &parser.Match{
 			TotalKills:  0,
-			Players:     []string{"Player1", "Player2", "Player3"},
+			Players:   map[int]string{
+				0:"Player1", 
+				1:"Player2", 
+				2:"Player3",
+			},
 			KillCount:   map[string]int{},
 			Leaderboard: map[int]string{},
 			KillMeans:   map[string]int{"MOD_FALLING": 0},
@@ -227,7 +243,11 @@ func TestRegisterKill(t *testing.T) {
 		//* Create test data
 		match := &parser.Match{
 			TotalKills:  0,
-			Players:     []string{"Player1", "Player2", "Player3"},
+			Players:   map[int]string{
+				0:"Player1", 
+				1:"Player2", 
+				2:"Player3",
+			},
 			KillCount:   map[string]int{},
 			Leaderboard: map[int]string{},
 			KillMeans:   map[string]int{},
@@ -259,7 +279,11 @@ func TestRegisterKill(t *testing.T) {
 		//* Create test data
 		match := &parser.Match{
 			TotalKills:  0,
-			Players:     []string{"Player1", "Player2", "Player3"},
+			Players:   map[int]string{
+				0:"Player1", 
+				1:"Player2", 
+				2:"Player3",
+			},
 			KillCount:   map[string]int{},
 			Leaderboard: map[int]string{},
 			KillMeans:   map[string]int{},
@@ -292,24 +316,22 @@ func TestRegisterKill(t *testing.T) {
 func TestRegisterPlayer(t *testing.T) {
 	//* Create test data
 	match := &parser.Match{
-		Players:     []string{},
+		Players:     map[int]string{},
 		KillCount:   map[string]int{},
 		Leaderboard: map[int]string{},
 		KillMeans:   map[string]int{},
 	}
 
 	line1 := "23:04 ClientUserinfoChanged: 2 n\\TestPlayer\\t\\0\\model\\sarge\\hmodel\\sarge\\g_redteam\\none\\g_blueteam\\red"
-	line2 := "23:04 ClientUserinfoChanged: 2 n\\Test Player With Spaces\\t\\0\\model\\sarge\\hmodel\\sarge\\g_redteam\\none\\g_blueteam\\red"
-	tokens1 := strings.Split(line1, " ")
-	tokens2 := strings.Split(line2, " ")
+	line2 := "23:04 ClientUserinfoChanged: 3 n\\Test Player With Spaces\\t\\0\\model\\sarge\\hmodel\\sarge\\g_redteam\\none\\g_blueteam\\red"
 
 	t.Run("Test register player", func(t *testing.T) {
 		//* FUNCTION CALL
-		parser.RegisterPlayer(match, tokens1)
+		parser.RegisterPlayer(match, line1, 2)
 
 		//* Assert player has been registered
 		expectedPlayer := "TestPlayer"
-		if !reflect.DeepEqual(match.Players[0], expectedPlayer) {
+		if !reflect.DeepEqual(match.Players[2], expectedPlayer) {
 			t.Errorf("Expected players: %v, but got: %v", expectedPlayer, match.Players[0])
 		}
 
@@ -322,11 +344,11 @@ func TestRegisterPlayer(t *testing.T) {
 
 	t.Run("Test register player with spaces", func(t *testing.T) {
 		//* FUNCTION CALL
-		parser.RegisterPlayer(match, tokens2)
+		parser.RegisterPlayer(match, line2, 3)
 
 		//* Assert player has been registered
 		expectedPlayer := "Test Player With Spaces"
-		if !reflect.DeepEqual(match.Players[1], expectedPlayer) {
+		if !reflect.DeepEqual(match.Players[3], expectedPlayer) {
 			t.Errorf("Expected players: %v, but got: %v", expectedPlayer, match.Players[1])
 		}
 
@@ -339,8 +361,8 @@ func TestRegisterPlayer(t *testing.T) {
 
 	t.Run("Test register existing player", func(t *testing.T) {
 		//* FUNCTION CALL
-		parser.RegisterPlayer(match, tokens1)
-		parser.RegisterPlayer(match, tokens2)
+		parser.RegisterPlayer(match, line1, 2)
+		parser.RegisterPlayer(match, line2, 3)
 
 		//* Assert player has not been registered again
 		if len(match.Players) != 2 {
