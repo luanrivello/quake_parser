@@ -151,9 +151,6 @@ func ExtractMatchData(match *Match, lines []string, lineNumber int, waitgroup *s
 }
 
 func RegisterKill(match *Match, tokens []string) {
-	//* Add total kills
-	match.TotalKills++
-
 	//* Extract killer name
 	var i int = 5
 	var killer string
@@ -180,20 +177,22 @@ func RegisterKill(match *Match, tokens []string) {
 		i++
 	}
 
-	if killer != "<world>" {
-		//* Register kill
-		match.KillCount[killer]++
-	} else {
-		//* Subtract kill from the victim of <world>
-		match.KillCount[victim]--
-	}
-
 	//* Check if it was suicide or unknown
-	if killer == victim {
+	if killer == "<world>" {
+		match.KillCount[victim]--
+		match.KillMeans[killMean]++
+
+  } else if killer == victim {
+		match.KillCount[victim]--
 		match.KillMeans["MOD_SUICIDE"]++
+
 	} else if _, ok := match.KillMeans[killMean]; !ok {
+	  match.TotalKills++
 		match.KillMeans["MOD_UNKNOWN"]++
+
 	} else {
+	  match.TotalKills++
+		match.KillCount[killer]++
 		match.KillMeans[killMean]++
 	}
 }
