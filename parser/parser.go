@@ -187,12 +187,12 @@ func RegisterKill(match *Match, tokens []string) {
 		match.KillMeans["MOD_SUICIDE"]++
 
 	} else if _, ok := match.KillMeans[killMean]; !ok {
-	  match.TotalKills++
+		match.TotalKills++
 		match.KillCount[killer]++
 		match.KillMeans["MOD_UNKNOWN"]++
 
 	} else {
-	  match.TotalKills++
+		match.TotalKills++
 		match.KillCount[killer]++
 		match.KillMeans[killMean]++
 	}
